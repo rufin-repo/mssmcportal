@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "lib" : ["es6", "dom", "es2018.promise"],
+    "target": "ES2018",
+    "module": "commonjs",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    //"noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "allowJs": true,
+    //"esModuleInterop": true,
+    //"allowSyntheticDefaultImports": true,
+  },
+  "compileOnSave": true,
+  "exclude": [
+    "node_modules",
+    "**/*.d.ts"
+  ],
+  "files": [
+    "mmahome.ts",
+    "mmadata.ts",
+    "blueimp_md5.ts",
+    "askserver.ts",
+    "CWA.ts",
+  ]
+}
