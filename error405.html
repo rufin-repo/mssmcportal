@@ -1,0 +1,79 @@
+<html>
+<head>
+  <style>
+
+body {
+  background-color: #a22;
+}
+
+.mainbox {
+  display:grid;
+  grid-template-columns: auto auto auto;
+  margin: auto;
+  position: relative;
+  max-width:30rem;
+}
+
+.err {
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 8rem;
+  text-align: right;
+}
+
+.err2 {
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 8rem;
+}
+
+.spin{
+  animation: 2.5s linear infinite spinner;
+  text-align:center;
+}
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin img {
+  margin-top:1rem;
+  width:7rem;
+  height:auto;
+}
+
+.msg {
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+  <div class="mainbox">
+    <div class="err">4</div>
+    <div class="spin"><img src="/MM-IsoCubeBall.svg"/></div>
+    <div class="err2">5</div>
+    <div class="msg">
+      <span style="color:#fff;">Not Allowed</span><br>
+
+      Your browser has made an HTTP request that is not allowed. Please contact the site admin for more information.
+      <p>Go to the <a href="/index.html">portal</a> and try from there.</p></div>
+  </div>
+</body>
+</html>
