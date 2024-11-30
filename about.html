@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About the Portal</title>
+<meta name="Description" content="MSS Math Club Web Portal"/>
+
+<style>
+@font-face {
+  font-family: 'TypeWriter';
+  font-style: normal;
+  font-weight: normal;
+  src: local('TypeWriter'), url("rsrc/gtw.ttf");
+}
+@font-face {
+  font-family: "TypeWriter2";
+  font-style:normal;
+  font-weight:normal;
+  src: local("TypeWriter2"), url("rsrc/VTBULLET.TTF");
+}
+@font-face {
+  font-family: "TypeWriter2";
+  font-style:bold;
+  font-weight:600;
+  src: local("TypeWriter2"), url("rsrc/VTCORONA.TTF");
+}
+@font-face {
+  font-family: "Roboto";
+  font-style:normal;
+  font-weight:500;
+  src: local("Roboto"), url("rsrc/Roboto-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Icons";
+  src: local("Icons"), url("rsrc/MaterialIconsRound-Regular.otf");
+}
+
+html, body{
+--ttl1: darkorange;    --ttl1i:chocolate;
+--ttl3: gold;          --ttl3i:darkgoldenrod;
+--ttl2: darkseagreen;  --ttl2i:seagreen;
+--hoverBg: #ffffef;  /* hover bg */
+--hoverBg2: #fafff3;  /* hover bg */
+/* darkslategray;   expanded section title color */
+--txtClr1:#000; /* #850;*/
+font-family: "TypeWriter2";
+font-size:16px;
+}
+
+h1 {
+  font-family: "TypeWriter2";
+  font-style: bold;
+  font-weight: 600;
+  font-size: 36px;
+  border-radius: 3px;
+  padding: 4px 20px 4px 20px;
+  box-shadow: 4px 4px 8px 4px rgba(0,0,0,0.05);
+  background-color:#fff;
+  color:darkgray;
+}
+
+i {
+  font-family: 'TypeWriter2';
+  font-style:italic;
+  font-size:18px;
+  font-stretch: condensed;
+  color:seagreen;
+}
+
+small {
+  font-family: 'Courier New', Courier, monospace;
+  font-style:italic;
+  font-size: 17px;
+  color:dimgray;
+}
+
+.content b {
+  font-family: "TypeWriter2";
+  font-style:bold;
+  font-stretch: condensed;
+  color: olive;
+}
+
+.content h2, .content h3, .content h4 {
+  font-family: "TypeWriter";
+  color: olivedrab;
+  margin-bottom:10px;
+}
+
+.icon, h6 {
+  font-family: 'Icons';
+  font-size: 22px;
+}
+
+.content em {
+  color: darkolivegreen;
+}
+
+.collapsable > input[name="expandBox"] {
+  display: none;
+}
+
+.collapsable label {
+  font-family: "TypeWriter";
+  font-size: 26px;
+  margin: 0 auto;
+}
+
+.collapsable .content {
+  /* font-family: 'Courier New', Courier, monospace; */
+  /* font-family: "TypeWriter2"; */
+  /* font-family: "Roboto"; */
+  font-family: "Times New Roman", Times, serif;
+  font-weight: normal;
+  font-size:22px;
+  margin-left:40px;
+  color: var(--txtClr1);
+}
+
+/* Collapsible content animation effects */
+.collapsable .content {
+  /* background: #fff; */
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(-90deg);
+  /* transform: scaleY(0);
+  transform-origin:0% 0%; */
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(0deg);
+  max-height: 100vh;
+  /* transform: scaleY(100%);
+  transform-origin:0% 0%; */
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  border-top: 0;
+  transition: 0.3s;
+}
+
+.collapsable label {
+  display: block;
+  margin: 0;
+  color: var(--ttl2);
+  cursor: pointer;
+  font-weight: normal;
+  padding:10px;
+  background: transparent;
+  user-select: none;
+}
+
+.collapsable label:hover,
+.collapsable label:focus {
+  color: var(--ttl3);
+  background:var(--hoverBg);
+}
+.collapsable > input[name="expandBox"]:checked ~ label {
+  color: var(--ttl1);
+  background: transparent;
+}
+.collapsable > input[name="expandBox"]:checked ~ label:hover,
+.collapsable > input[name="expandBox"]:checked ~ label:focus {
+  color: var(--ttl2i);
+  background:var(--hoverBg2);
+}
+
+/* Style for the animated icon before the label of collapsed section */
+.collapsable label::before {
+  color: var(--ttl2i);
+  font-family: "Icons";
+  content: attr(name); /*"\2312";*/
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  transform-origin: 50% 50%; /*previously 50% 39%*/
+  transition: 0.4s;
+}
+.collapsable label:hover::before,
+.collapsable label:focus::before {
+  color: var(--ttl3i);
+}
+
+/* Style for the animated icon before the label of expanded section */
+.collapsable > input[name="expandBox"]:checked ~ label::before {
+  /* content: "\2313"; */
+  color: var(--ttl1i);
+  font-family: "Icons";
+  content: attr(name);
+  transform: rotate(180deg);
+  transform-origin: 50% 50%;
+  transition: 0.4s;
+}
+
+b { color: slategray;
+}
+
+a, a>b {
+  color: orange;
+  font-family: "TypeWriter2";
+  font-style:bold;
+  font-weight:600;
+}
+a:visited {
+  color: tan;
+  font-style:normal;
+}
+img {
+  max-width: 70vw;
+  max-height:70vh;
+}
+
+</style>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_HTMLorMML">
+</script>
+<script>
+function updateMaxHeight()
+{
+  let inps = document.getElementsByName("expandBox");
+  for (let i=0; i<inps.length; i++) {
+    if (inps[i] && inps[i] instanceof HTMLInputElement) {
+      let content = inps[i].nextElementSibling.nextElementSibling;
+      if (content && content.className==="content") {
+        content.style.maxHeight = inps[i].checked ? content.scrollHeight+"px" : "0px";
+      }
+    }
+  }
+}
+function chkboxclick(e)
+{
+  if (e && e.target instanceof HTMLInputElement) {
+    let tgt = e.target;
+    if (tgt.checked) {
+      let inps = document.getElementsByName("expandBox");
+      for (let i=0; i<inps.length; i++) {
+        if (inps[i]!==tgt && inps[i] instanceof HTMLInputElement && inps[i].type==="checkbox") {
+          inps[i].checked=false;
+        }
+      }
+    }
+    updateMaxHeight();
+  }
+}
+function init()
+{
+  let inps = document.getElementsByName("expandBox");
+  for (let i=0; i<inps.length; i++) {
+    if (inps[i] instanceof HTMLInputElement && inps[i].type==="checkbox") {
+      inps[i].addEventListener("click", chkboxclick);
+    }
+  }
+  updateMaxHeight();
+}
+</script>
+
+
+</head>
+<body onload="init()" onresize="updateMaxHeight()">
+
+<h1>About The Portal</h1>
+
+<section class="collapsable">
+  <input id="clc" type="checkbox" name="expandBox">
+  <label name="&#xe0da;" for="clc">Privacy And Security</label>
+  <div class="content">
+      The web site is designed with privacy and security at the foremost,
+      even before functionality. After all, many of the functions of
+      our site can be achieved using a combination of other web services
+      like our YRDSB GAPPS account, Discord group etc. If members have to
+      give up more personal info or get exposed to additional security risks
+      then we are better off not having the site.
+    <h4>User-Ids and Passwords</h4>
+      Our site collects or stores ZERO personal information
+      on the server. Not even your user-Id, and most definitely not passwords.
+      User-Ids or passwords are not even communicated across the network during
+      authentication.
+      Therefore there is no chance for
+      hackers to eavedrop on anything or steal from our server,
+      because there is nothing to capture or steal!
+      You may wonder if it would be better to do away with signing-in altogether.
+      In order to protect against abuse and for fairness in certain
+      functions like polling, we do sometimes require members to authenticate
+      their membership through signing-in, and to keep track of polls and
+      messages, but in an anonymous way, as far as possible.
+      We only send irreversibly-hashed user-Ids and twice irreversibly-hashed
+      passwords to the server for authentication.
+      On the server side, we followed the
+      best practice of storing and comparing only further "salted" and
+      industrial-strength Blowfish-hashed values in our user-list.
+      The key idea is that plain user-Ids or passwords
+      are <em>NEVER</em> even sent through the network, and that the hashed passwords are
+      further <em>salted</em> (i.e. with long random bits added) on
+      the server side to eliminate the possibility of even telling
+      whether two password hashes came from the same original password.
+    <!-- <h4>Browser Local Storage</h4>
+      On the browser side (i.e. on the member's device), and after successful
+      authentication, we do put the plain user-Id, and the doubly-hashed
+      password into your browser's local storage exclusively for our site
+      under your own account to allow auto sign-in on subsequent visits.
+      This private data are deleted from your local storage if you sign
+      out explicitly. Even if some hacker does manage to spy into your private
+      browser storage, all that they could steal would be your user-Id. -->
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="cba" type="checkbox" name="expandBox">
+  <label name="&#xe65f;" for="cba">What For?</label>
+  <div class="content">
+    The site is intended to provide a unified location for Math Club
+    resources like lesson notes, problems and solutions,
+    list of events, announcements etc. These used to be placed in
+    some YRDSB directories and they require signing onto a school
+    account for access.
+    <p>
+    Our portal site would hopefully provide such access more simply and more.
+    For example, we could set up simple polls for not so serious issues and
+    allow members to vote anonymously or authenticated.<br>
+    Interactive activities can also be done. E.g. games, animated demos,
+    quizzes etc.
+    </p>
+    <h4>Member contributed contents</h4>
+    The site is only as useful as members feel it to be. Therefore it
+    is important to allow as much member participation and contribution
+    as possible.
+    <p>
+    The Event Calendar is already fully editable by any authenticated users.
+    We are thinking that the News interface would
+    be opened for editing by any members and that new Quiz questions
+    can be contributed to be automatically listed under the
+    "Pick Some Topics" interface. A Math Micro-blog is being considered too.
+    More about that later!
+    </p>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="pkp" type="checkbox" name="expandBox">
+  <label name="&#xebcc;" for="pkp">Events</label>
+  <div class="content">
+      The Event Calendar interface is now fully functional! Please try it.
+      You could even use asciiMath (or the more tedius LaTeX) to put in
+      tricky math expressions...
+    <p>
+      <em>Sign-in</em> and you could contribute any note, reminder or
+      contest info by adding new events into the calender.<br>
+      General members would be able to modify only their own contributed events.
+      If you are interested to help with the maintainance of the portal
+      data, including moderating and updating events, please contact Rufin
+      to upgrade your account to admin level &mdash; i.e. `aleph_0`!
+    </p>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="cpb" type="checkbox" name="expandBox">
+  <label name="&#xef49;" for="cpb">News</label>
+  <div class="content">
+    <p>
+      The News list is for displaying the latest news and announcements,
+      or even the latest <em>weekly problems</em>.
+    </p>
+    <p>It is now fully editable through the Docs <span class="icon">&#xe02f;</span> interface
+      <em>(after you have signed in as a user with admin rights)</em>. Just click on
+      the News tab <span class="icon">&#xef49;</span> on top of the Doc List dialog, and there you can
+      create new News Articles, choose an auto-expiration date, and pick
+      your bespokeon icon for your piece of announcement &mdash; with
+      MathJax (AsciiMath + LaTeX) typesetting support too! </p>
+    <p>
+      Please let Rufin know if there are problems with the new editor.
+      (Although it has been tested on tiny screen smartphones, it is
+      probably not very practical to edit complex news articles
+      on a cramped phone screen &mdash; a few lines of quick announcements should be
+      fine.)
+    </p>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="cbb" type="checkbox" name="expandBox">
+  <label name="&#xe175;" for="cbb">Polling</label>
+  <div class="content">
+    Polling is working! Please try it.<br>
+    Setting up a new poll is really easy. Just add
+    a pair of files under the "docs/polls" directory:
+    <ol type="(1)">
+      <li>A Poll File, for defining the active-until time,
+        filename of a poll description file and a sequence of
+        poll choices;
+      </li>
+      <li>A corresponding description file (text with formatting markups) referenced
+        from the Poll File.
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="ntd" type="checkbox" name="expandBox">
+  <label name="&#xe799;" for="ntd">Quiz Time</label>
+  <div class="content">
+    The Quiz page automatically reads in question files in the
+    form of an array of JS objects. The format is quite simple.
+    Please check out the quiz file: <code>MCQ_Misc.js</code> for
+    some examples.<br>
+    Anyone is welcome to contribute new questions under any
+    categories -- as long as the questions are well tested,
+    correct and interesting!<br>
+    <h4>Member Contributions</h4>
+    More detailed information will be posted later, on how
+    members could add questions, or even create
+    arbitrary dynamic question generators to create fresh ones on the fly.
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="gth" type="checkbox" name="expandBox">
+  <label name="&#xe8a7;" for="gth">Docs and Demos</label>
+  <div class="content">
+    Interactive games, videos, pdf files, slides blah blah blah...
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="sitedev" type="checkbox" name="expandBox">
+  <label name="&#xe312;" for="sitedev">Web Site Coding</label>
+  <div class="content">
+    The Portal is implemented as a Progressive Web App (PWA) that
+    can be installed on the home page of mobile devices. The client (browser)
+    side is written in TypeScript (compiled into JavaScript then
+    further "advanced closure-compiled" into tightly optimized JS codes
+    using Google's Closure Compiler).
+    <p>
+    The server side is written in Php. We are currently not sure if
+    the hosting service provider (IONOS.ca) allows Server Sent Events (SSE).
+    If so, we could write a chat room interface that allows Math
+    equations to be typed out as 1st class citizens!
+    </p>
+    <h4>Who's going to maintain it?</h4>
+    The entire site is contributed by Rufin and he is currently the only dev
+    working on it.<br>
+    In the long run, the source code of the entire site will be released
+    for future execs or devs to improve upon. Please contact Rufin if you
+    are interested to help! If you are good at Math,
+    a mere 10k lines of code is not going to scare you, right? <pre>:-)</pre>
+  </div>
+</section>
+
+</body>
+</html>

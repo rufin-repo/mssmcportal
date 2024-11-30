@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>MSS Math Club Portal</title>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="seagreen">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#232">
+<meta name="Description" content="web-app, offline, mss, mathclub, portal, markville">
+<link rel="manifest" href="mma-webapp.manifest">
+<link rel="apple-touch-icon" sizes="192x192" href="imgs/webappicon192.png">
+
+<style>
+  @font-face {
+    font-family: 'Icons';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Icons'), url("rsrc/MaterialIconsRound-Regular.otf");
+  }
+  @font-face {
+    font-family: 'Barlow';
+    font-style: normal;
+    font-weight: 100;
+    src: local('BarlowLite'), url("rsrc/BarlowCondensed-Light.ttf");
+  }
+  @font-face {
+    font-family: 'Barlow';
+    font-style: normal;
+    font-weight: normal;
+    src: local('BarlowReg'), url("rsrc/BarlowCondensed-Regular.ttf");
+  }
+  /* @font-face {
+    font-family: 'Barlow';
+    font-style: normal;
+    font-weight: medium;
+    src: local('BarlowMed'), url("rsrc/BarlowCondensed-Medium.ttf");
+  } */
+  @font-face {
+    font-family: 'TypeWriter';
+    font-style: normal;
+    font-weight: normal;
+    src: local('TypeWriter'), url("rsrc/SpecialElite-Regular.ttf");
+  }
+  body {overflow:hidden;}
+
+  html,body{
+    width:calc(100% - 1px);
+    padding:0;
+    margin:0;
+    border:0;
+    border-collapse:collapse;
+    height: calc(100% - 1px); /*calc(100% + 80px);*/ /* fool mobile browser to allow the page to be flicked up and maximized.*/
+    font-family: "Arial", sans-serif;
+--swatchBg1: rgb(43, 43, 47);            /* UI bar normal background */
+--swatchBg2: goldenrod;       /* focused item background */
+--swatchBg3: #fffff0;         /* music score background */
+--swatchBg4: #000;            /* statusbar background */
+--swatchBg5: var(--swatchBg2);  /* hover bg */
+
+--swatchUI1: #755E55;         /* icon outline color */
+--swatchUI2: #ffffff;         /* icon body color */
+--swatchUI3: maroon;          /* highlighted icon outline */
+--swatchUI4: moccasin;        /* highlighted icon body color */
+  }
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }
+  select, input, button {
+    font-size:16px;
+  }
+  .CWAUITable canvas {
+    /* position:absolute;
+    top:0px; left:0px; */
+    text-align:top;
+    display:block;  /* This would prevent a gap (because of text descent) inside a td */
+  }
+  .buttonTab {
+    border-collapse: collapse;
+    border-width: 0px;
+    margin: 0px;
+    padding: 0px;
+    background: transparent;
+    border:none;
+  } /*.buttonTab*/
+  tr#topButtons {
+    height:40px;
+    background-color: SlateGray;
+  }
+  tr#calcbtnsrow {
+    background-color:lightslategray;
+  }
+  table.CWAUITable {
+    position: fixed; /* Fixed so that it is unaffected by scrolling or flicking.*/
+    /* if position:absolute is used, an "onscroll" event handler must be added to
+      reposition the top of this table (after deboucing):
+        UITable.style.top=document.body.scrollTop.toString()+"px"
+      o.w. the ui might got flicked outside the window boundary in some mobile
+      browsers (e.g. mobile safari) */
+    top:0px;     left:0px;
+    width:100%;  height: 100%;
+    padding:0px;  /* T R B L */
+    margin:0px;
+    border:none;
+    border-collapse:collapse;
+  } /*.CWAUITable*/
+  #CWAMainCanvasTr, #CWAMainCanvasTd, #CWAStatusTxtTr{
+    border: 0px; padding:0px; margin: 0px;
+    vertical-align:top; overflow:hidden;
+    border-collapse:collapse;
+  }
+  #CWAMainCanvasTr, #CWAMainCanvasTd {
+    height:100%;
+    width:100%;
+  }
+  /* .CWAStatusTxtTr {
+    pointer-events: none;
+  } */
+  .CWAStatusTxt {
+    padding:0 4px 0 4px;
+    font-family: "Arial", sans-serif;
+    height: 30px;
+    background-color: #000;
+    /* background-color: var(--swatchBg4); */
+    color:#fff;
+    overflow: hidden;
+    vertical-align:middle;
+    /* pointer-events: none; */
+  }
+
+.tabDiv {
+    padding: 0px 10px 0px;
+    overflow: hidden;
+    margin-bottom: -1px;
+    height: 40px;
+    vertical-align: bottom;
+}
+.tabDiv button {
+    font-size:13px;
+    vertical-align:bottom;
+    float: left;
+    height: 31px;
+    line-height: 34px;
+    -webkit-border-radius: 8px 8px 0 0;
+    -moz-border-radius: 8px 8px 0 0;
+    border-radius: 8px 8px 0 0;
+    background: #ddd;
+    border: 0px;
+    padding: 0px 4px;
+    color: #000;
+    margin:6px 5px 0px 5px;
+    text-decoration: none;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.tabDiv button.selected {
+    font-weight:bold;
+    background: #FFF;
+    height:36px;
+    margin:3px 5px 0px 5px;
+}
+.tabDiv button:enabled:hover {
+    background: -webkit-gradient(linear, 0 0, 0 70%, from(#EEF), to(#FFF));
+    background: -webkit-linear-gradient(#EEF, #FFF 70%);
+    background: -moz-linear-gradient(#EEF, #FFF 70%);
+    background: -ms-linear-gradient(#EEF, #FFF 70%);
+    background: -o-linear-gradient(#EEF, #FFF 70%);
+    background: linear-gradient(#EEF, #FFF 70%);
+}
+.tabDiv button:disabled{
+  color: #888;
+}
+
+input[type=number].addBarNumberInput,
+input[type=number].dialogNumberInput,
+input[type=password].dialogTextInput,
+input[type=text].addBarTextInput,
+input[type=text].dialogTextInput {
+  min-width: 80px;
+  height:32px;
+  font-family: sans-serif;
+  font-size:18px;
+  padding:1px;
+  margin:1px;
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:        border-box;
+}
+
+.dialogButton {
+  color: #000;
+  padding:6px 12px 6px 12px;  /* T R B L */
+  border-radius: 8px;
+  border:none;
+  background-color: gainsboro;
+  float: right;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.dialogButton:hover {
+  background-color: #eee;
+  border: 1px;
+  border-color:gainsboro;
+}
+
+.dialogButton:disabled, .dialogButton:disabled:hover {
+  background-color: silver;
+  color: #666;
+}
+
+.dialogButton.caution {
+  background-color:mistyrose;
+}
+.dialogButton.caution:hover {
+  background-color:pink;
+}
+.dialogButton.darker {
+  background-color:silver;
+}
+.dialogButton.darker:hover {
+  background-color:gainsboro;
+}
+
+.flushRight {
+  float:right;
+}
+.flushLeft {
+  float:left;
+}
+.dangerFlushLeft {
+  float:left;
+  background-color: mistyrose;
+}
+.alignRight {
+  text-align:right;
+}
+.dialogDismissButtonsDiv button {
+  margin:5px
+}
+
+.genericQueryDiv{
+  position: fixed; /*absolute;*/
+  background-color:#fff; /*rgb(255, 250, 225);*/
+  min-width:320px;
+  max-height: 90%;
+  top: 20px;
+  left: 50%;
+  overflow: auto;
+  /*white-space:nowrap;
+  text-overflow: ellipsis; */
+  padding: 2px;
+  border-radius: 4px;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow: 3px 12px 16px 4px rgba(0,0,0,0.25);
+}
+.genericQueryMsgDiv {
+  padding: 40px 0px;
+  background:transparent;
+}
+
+.alertBoxDiv {
+  position: fixed; /*absolute;*/
+  background-color:#fff; /*rgb(255, 250, 225);*/
+  min-width:320px;
+  top: 20px;
+  left: 50%;
+  padding: 2px;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+  z-index: 3;
+  box-shadow: 3px 12px 16px 4px rgba(0,0,0,0.25);
+} /* alertBoxDiv */
+table.alertBoxTable {
+  background:transparent;
+  padding: 0px;
+  margin: 0px;
+  width:100%;
+} /* alertBoxTable */
+table.alertBoxTable tr td {
+  padding:10px;
+}
+table.alertBoxTable tr:nth-child(1) td {
+  padding:2px;
+  background-color:gold;
+  /* border-bottom-style: solid;
+  border-color: #bbb #ddd #ddd #bbb; */
+}
+table.alertBoxTable tr:nth-last-child(1) td {
+  padding:10px;
+  font-size:20px;
+}
+.alertBoxDiv div.dialogDismissButtonsDiv button {
+  width:80px;
+  background-color: rgb(255, 235, 125);
+}
+.alertBoxDiv div.dialogDismissButtonsDiv button:hover {
+  width:80px;
+  background-color: rgb(255, 226, 62);
+}
+.alertBoxIconDiv {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  float:left;
+  vertical-align: top;
+  margin: 2px 12px 2px 2px;
+}
+#alertBoxMsgDiv, #genericQueryMsgDiv {
+  height:100%;
+  width:100%;
+  padding:0px;
+}
+
+
+/*
+  signinDialogDiv and inner elements styling.
+*/
+.signinDialogDiv{
+  position: fixed; /*absolute;*/
+  background-color:#ccc; /*(silver;*/
+  max-height: 90%;
+  top: 20px;
+  left: 50%;
+  overflow:hidden;
+  padding: 1px 1px 8px 1px; /* T R B L */
+  border-radius: 6px;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow: 3px 8px 16px 0px rgba(0,0,0,0.15);
+}
+.signinDialogDiv#retypePwdDialog {
+  background-color:#fff;
+}
+.signinDialogDiv table {
+  width:100%;
+}
+.signinDialogDiv input[type="text"], .signinDialogDiv input[type="password"] {
+  width:140px;
+}
+.signinDialogDiv tr td {
+  /*font-size:100%;*/
+  padding:4px;
+}
+.signinDialogDiv tr td:nth-child(1) {
+  padding-left:20px;
+}
+.signinDialogDiv tr td:nth-last-child(1) {
+  padding-right:20px;
+}
+.signinDialogDiv .dialogDismissButtonsDiv {
+  padding:8px;
+}
+.signinDialogDiv tr:nth-child(1) td {
+  border-radius: 4px 4px 0px 0px;
+  padding: 3px;
+  color:#fff;
+  /*font-size:70%;*/
+}
+button.revealPwdBtn {
+  -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  font-family: "Icons";
+  color: #000;
+  font-size:24px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+button.revealPwdBtn:active {
+  /* background: rgba(255,255,255,0.5); */
+  color:#fff;
+  background: #000a;
+}
+
+
+
+.buttonPanelDiv {
+  position: absolute;
+  background-color: rgb(255,255,255); /* this is changed dynamically */
+  top:0;
+  left:0;
+  width: 400px;
+  height: 200px;
+  padding:2px;
+  border-radius: 2px;
+  z-index: 2;
+  box-shadow: 3px 8px 16px 8px rgba(0,0,0,0.2);/* T R B L */
+}
+.buttonPanelDiv.leftPointer::after {
+  content:"";
+  position:absolute;
+  top: var(--panelPointerY); /*16px;*/ /* controls vertical position */
+  left:-20px; /* value = - border-left-width - border-right-width */
+  bottom:auto;
+  border-style:solid;
+  border-width:10px 20px 10px 0;/* T R B L */
+  border-color:transparent  #fff;
+}
+
+/******************************
+ *  Splash Screen
+ ******************************/
+/* @font-face {
+  font-family: 'AppLogo';
+  font-style: normal;
+  font-weight: 900;
+  src: local('AppLogo'), url("rsrc/led_board-7.ttf");
+} */
+
+h1.splash {
+  text-align:center;
+  font-size: min(7vw, 45px);
+  /* font-family:'Courier New', monospace; */
+  font-family:"TypeWriter";
+  color: #020b;
+  font-weight:900;
+}
+.aboutboxlogo {
+  font-size:30px;
+  font-family:'Courier New', monospace;
+  font-weight:900;
+}
+h3.splash, p.splash {
+  text-align:center;
+}
+
+.spinner {
+  position: fixed;
+  background: transparent;
+  top: 50%;
+  left: 50%;
+  margin-top: -40px;
+  margin-left: -40px;
+  padding: 0px;
+  border-left:   8px solid #898; /*rgba(0,0,0,0.2);*/
+  border-top:    8px solid rgba(182,204,187,0.2);
+  border-right:  8px solid rgba(182,204,187,0.2);
+  border-bottom: 8px solid rgba(182,204,187,0.2);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  /* -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
+  z-index: 5; /* on top of everything */
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.textinfoarea {
+  font-family: 'Courier New', courier, monospace;
+  position: fixed; /*absolute;*/
+  background-color: gold;
+  width: 70%;
+  min-width: 240px;
+  min-height: 200px;
+  max-width: 500px;
+  max-height: 90%;
+  top: 50%;
+  left: 50%;
+  overflow: hidden;
+  /*white-space:nowrap;
+  text-overflow: ellipsis; */
+  border-radius: 4px;
+  padding: 4px;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  box-shadow: 3px 8px 16px 8px rgba(0,0,0,0.2);/* xoff yoff Blur Spread color */
+}
+
+.subtleBtn {
+  background:transparent;
+  border: none;
+}
+.subtleBtn:hover {
+  background-color: #eef3;
+}
+
+.fadein {
+  animation: fadeIn 5s;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  70% {opacity:0;}
+  100% {opacity:1;}
+}
+
+.btnsGridDiv {
+  position:fixed;
+  width:auto;
+  text-align: right;
+  right:0px;
+  /* padding:10px; */
+  padding-right:10px;
+  padding-left:20px;
+  z-index: 1;
+  display:grid;
+  top:0;
+  gap:1px;
+  grid-template-areas: "btn" "btn" "btn" "btn" "btn" "btn" "btn" "btn";
+  align-content: space-around;
+  justify-items: center;
+} /*btnsGridDiv (container)*/
+.appBtn {
+  color:#000;
+  z-index:2;
+  padding: 0;
+  background-color: #fffd;
+  border-radius: 8px;
+  border:0;
+  box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.3);/* T R B L */
+  width:38px;
+  height:38px;
+  vertical-align:top;
+  text-align:left;
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+}
+.appBtn:enabled:hover {
+  background-color: #fff;
+  color:orange;
+}
+.appBtn:enabled:hover:active {
+  background-color: gold;
+  transform: translate(2px,2px);
+  box-shadow: none;
+  color:olivedrab;
+}
+.appBtn:disabled {
+  background-color:#fff9;
+  color:#0004;
+}
+.appBtn > img {
+  display: inline-block;
+  vertical-align: middle;
+}
+.appBtnIcn {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-family: "Icons";
+  font-size: 34px;
+  width:38px;
+  height:38px;
+}
+.appBtnTxt {
+  font-family: "Barlow";
+  font-size: 20px;
+  display: none
+}
+
+
+@media only screen and (orientation: portrait) {
+  /* This is the base portrait orientation layout */
+  /* top buttons spanning 100% of the width with  */
+  /* 20px padding at the bottom to make it less   */
+  /* to click on the bkgd */
+  .btnsGridDiv {
+    grid-template-areas: "btn btn btn btn btn btn btn btn";
+    width:100%;
+    margin-right:0px;
+    padding: 10px 0px 20px 0px;
+  }
+}
+@media only screen and (orientation: portrait) and (min-width: 810px) {
+  /* With a wide enough screen, even portrait mode can show the button text */
+  .appBtn {
+    width:100px;
+  }
+  .noTxtBtn {
+    width:38px;
+  }
+  .appBtnTxt {
+    display: inline-block;
+  }
+}
+
+@media only screen and (orientation:landscape) {
+  /* This is the base landscape orientation layout */
+  /* grid div tightly fitting the buttons with  */
+  /* 20px padding on the left to make it less   */
+  /* to click on the bkgd */
+  .btnsGridDiv {
+    justify-items: right;
+    /* width: calc(100% - 10px); */
+    padding:0px 10px 0px 20px;
+  }
+}
+@media only screen and (orientation:landscape) and (min-width: 500px) {
+  .btnsGridDiv {
+    padding:0px 10px 0px 20px;
+  }
+  .appBtn {
+    width:100px;
+  }
+  .noTxtBtn {
+    width:38px;
+  }
+  .appBtnTxt {
+    display: inline-block;
+  }
+}
+@media only screen and (orientation:landscape) and (min-width: 500px) and (min-height:400px) {
+  .btnsGridDiv {
+    padding:10px 10px 10px 20px;
+    gap:6px;
+  }
+}
+@media only screen and (orientation:landscape) and (max-height: 320px) {
+  .btnsGridDiv {
+    grid-template-areas: "btn btn btn btn btn btn btn btn";
+    margin-left: auto;
+    justify-items: center;
+    padding:10px 0px 20px 0px;
+    width:100%;
+  }
+  .appBtn{
+    width:auto;
+  }
+  .appBtnTxt {
+    display:none;
+  }
+}
+
+.appBtn.noTxt {
+  height:38px;
+  width:38px;
+}
+
+/**************************************************************
+  News List Dialog classes
+ **************************************************************/
+.newsDlgDiv, #edPreviewTr >div {
+--ttl1: darkorange;    --ttl1i:chocolate;
+--ttl3: gold;          --ttl3i:darkgoldenrod;
+--ttl2: darkseagreen;  --ttl2i:seagreen;
+--hoverBg: #ffffef;  /* hover bg */
+/* darkslategray;   expanded section title color */
+--txtClr1:#000; /* #850;*/
+  touch-action: pan-x pan-y;
+  position:absolute;
+  /* margin:5px; */
+  overflow: auto auto;
+  z-index:2;
+  background-color:#fff;
+  /* top:3px; left:3px; right:3px; bottom:3px; */
+  /* box-shadow: 0 8px 8px 0 #444; */
+  padding: 8px 0 0 0;
+  /* padding-top:8px;
+  padding-bottom:8px; */
+}
+.appBtn#btnCloseNews {
+  width:36px;
+  height:36px;
+  position:fixed;
+  top:2px;
+  right:2px;
+  background-color: #fff5;
+}
+
+.newsDlgDiv h1 {
+  margin-top:0px;
+  margin-bottom:10px;
+  font-family: "TypeWriter";
+  font-style: bold;
+  font-weight: 600;
+  font-size: 20px;
+  border-radius: 3px;
+  padding: 4px 20px 4px 20px;
+  box-shadow: 4px 4px 8px 4px rgba(0,0,0,0.05);
+  background-color:#fff4;
+  color:darkgray;
+}
+
+.newsartclr0 {
+  background-color: lightyellow;
+}
+.newsartclr1 {
+  background-color: #fff;
+}
+.newsartclr2 {
+  background-color: #fed;
+}
+.newsartclr3 {
+  background-color: honeydew;
+}
+
+.collapsable > input[name="expandBox"] {
+  display: none;
+}
+
+.collapsable label {
+  font-family: "TypeWriter";
+  font-size: 26px;
+  margin: 0 auto;
+}
+
+.collapsable .content {
+  /* font-family: 'Courier New', Courier, monospace; */
+  font-family: "Barlow", serif; /*"TypeWriter2";*/
+  font-weight: normal;
+  font-size:20px;
+  margin-left:30px;
+  padding-bottom:4px;
+  color: var(--txtClr1);
+}
+
+/* Collapsible content animation effects */
+.collapsable .content {
+  /* background: #fff; */
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(-90deg);
+  /* transform: scaleY(0);
+  transform-origin:0% 0%; */
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(0deg);
+  max-height: 100vh;
+  /* transform: scaleY(100%);
+  transform-origin:0% 0%; */
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  border-top: 0;
+  transition: 0.3s;
+}
+
+.collapsable label {
+  display: block;
+  margin: 0;
+  /* color: var(--ttl2); */
+  cursor: pointer;
+  font-weight: normal;
+  padding:10px;
+  background: transparent;
+  user-select: none;
+}
+
+.collapsable label:hover,
+.collapsable label:focus {
+  color: var(--ttl3);
+  /* background:var(--hoverBg); */
+}
+.collapsable > input[name="expandBox"]:checked ~ label {
+  color: var(--ttl1);
+  background: transparent;
+}
+
+/* Style for the animated icon before the label of collapsed section */
+.collapsable label::before {
+  color: var(--ttl2i);
+  font-family: "Icons";
+  content: attr(name); /*"\2312";*/
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  transform-origin: 50% 50%; /*previously 50% 39%*/
+  transition: 0.4s;
+}
+.collapsable label:hover::before,
+.collapsable label:focus::before {
+  color: var(--ttl3i);
+}
+
+/* Style for the animated icon before the label of expanded section */
+.collapsable > input[name="expandBox"]:checked ~ label::before {
+  /* content: "\2313"; */
+  color: var(--ttl1i);
+  font-family: "Icons";
+  content: attr(name);
+  transform: rotate(180deg);
+  transform-origin: 50% 50%;
+  transition: 0.4s;
+}
+
+
+.fileInputDlg{
+  position: fixed; /*absolute;*/
+  width:240px;
+  display:grid;
+  grid-template-rows: 44px 44px;
+  padding:10px;
+  background-color:#aaa; /*(silver;*/
+  max-height: 90%;
+  top: 20px;
+  left: 50%;
+  overflow:hidden;
+  border-radius: 6px;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow: 3px 8px 16px 0px rgba(0,0,0,0.15);
+}
+#filePickerTitle {
+  font-family:"Barlow";
+  font-weight: bold;
+  font-size:24px;
+  /* color:darkolivegreen; */
+}
+/* button#btnCloseFilePicker {
+  position:relative;
+  left:calc(100% - 40px);
+} */
+.fileInputDlg select, .fileInputDlg label {
+  height:40px;
+  width:234px;
+  border-radius:4px;
+  background-color: #fff;
+  box-shadow: 3px 3px 3px 3px#0002;
+  display: inline-block;
+  /* padding: 6px 12px 0px 12px; */
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+label.fileInp div {
+  margin-top:10px;
+  margin-left:10px;
+}
+input#fileInp {
+  height:40px;
+  display:none;
+}
+label.fileInp {
+  border-radius:4px;
+  background-color: #fff;
+  box-shadow: 3px 3px 3px 3px#0002;
+  /* vertical-align:middle; */
+  display: inline-block;
+  /* padding: 2px 12px 0px 12px; */
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.fileInputDlg select:active, .fileInputDlg label:active {
+  transform: translate(1px,2px);
+  box-shadow: none;
+}
+input#fileInp+label>div::before {
+  content:"File Picker...";
+  color: #000;
+}
+input#fileInp:disabled+label>div::before {
+  content:"^ Select dest first ^";
+  color: #888;
+}
+
+/**************************************************************
+  Calendar Dialog classes
+ **************************************************************/
+.calDlgDiv {
+  /* position: absolute; */
+  position:fixed;
+  top:6px; left:6px;
+  right:6px; bottom:30px;
+
+  max-width:600px;
+  max-height:600px;
+
+  box-shadow: 0 8px 8px 0 #0004;
+  background-color: gold;
+  padding:0;
+  border-radius:4px;
+  z-index:2;
+}
+.calDlgDiv > table {
+  height:100%;
+  width:100%;
+}
+.calDlgDiv > table > tr > td {
+  padding:0;
+}
+
+.calBtnsTd {
+  height:40px;
+}
+.calBtnsDiv {
+  padding:0;
+  font-size: 30px;
+  font-family: "Arial","Helvetica",sans-serif;
+  font-weight: normal;
+  -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+}
+.calBtnsDiv button {
+  margin:3px;
+}
+/* Responsive layout: Use a Condensed font for the "20YY MMM" text if we are on a narrow, portrait mode screen. */
+@media only screen and (orientation: portrait) {
+  .calBtnsDiv {
+    font-family: "Barlow";
+  }
+}
+@media only screen and (orientation: portrait) and (min-width:400px) {
+  .calBtnsDiv {
+    font-family: "Arial", "Helvetica", sans-serif;
+  }
+}
+tr.dayofweekLabelsTR {
+  width:100%;
+  font-size:14px;
+  font-family:"Arial","Helvetica",sans-serif;
+}
+tr.dayofweekLabelsTR td{
+  width:14.2857%;
+  height:16px;
+  text-align:center;
+  color:#0008;
+}
+/* Sun and Sat text should be displayed in a reddish colour */
+tr.dayofweekLabelsTR td:nth-child(1), tr.dayofweekLabelsTR td:nth-child(7){
+  color:#a008;
+}
+/* Responsive layout: in landscape mode on very narrow screens, hide the day-of-week row altogether */
+@media only screen and (orientation: landscape) {
+  tr.dayofweekLabelsTR {
+    display:none;
+  }
+}
+/* Responsive layout: show the day-of-week labels only if the screen height is > 320px */
+@media only screen and (orientation: landscape) and (min-height:320px) {
+  tr.dayofweekLabelsTR {
+    display:table-row;
+  }
+}
+
+.calThisMonth {
+  font-weight: bolder;
+  text-decoration: underline;
+}
+.calPastMonth {
+  font-weight: lighter;
+  color:#0004;
+}
+.calPastDay {
+  color: #0004;
+}
+
+
+.calendarDiv {
+  height:100%;
+  width:100%;
+  /* margin:4px; */
+  display:grid;
+  /* grid-template-columns: auto auto auto auto auto auto auto; */
+  grid-template-columns: 14.29% 14.29% 14.29% 14.29% 14.29% 14.29% 14.29%;
+  /* grid-template-rows: auto auto auto auto auto; */
+  grid-template-rows: 16.67% 16.67% 16.67% 16.67% 16.67% 16.67%;
+  border:0;
+  z-index:2;
+}
+.calendarDiv > div {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+  /* background-color:#0000; */
+  margin:2px;
+}
+.calEventView {
+  touch-action: pan-x pan-y;
+  overflow:auto;
+  /* position:absolute; */
+  position:fixed;
+  background-color: #fff;
+  margin:0;
+  padding:10px 10px 10px 10px;
+  z-index:2;
+  box-shadow: 8px 8px 20px 8px #0008;
+  font-family:'Courier New', Courier, monospace;
+  font-size:larger;
+}
+.calEventView > evdate {
+  margin-bottom:4px;
+  font-size:22px;
+  font-family:"Arial", "Helvetica", sans-serif;
+  /* text-decoration: underline; */
+  font-weight: 900;
+  color:#252d;
+}
+.calEventView em {
+  font-size:larger;
+  text-decoration: underline;
+  font-weight:900;
+  font-style: border;
+}
+.calEventView p {
+  margin-top:5px;
+  margin-bottom:5px;
+}
+.calEventView hr {
+  /* border-width:0.5px; */
+  border-top:1px;
+  border-color: #0008;
+  margin-top:4px;
+  margin-bottom:4px;
+}
+.evViewIcn {
+  font-family:"Icons";
+}
+.calDayDiv {
+  /* font-family: "Arial","Helvetica",sans-serif; */
+  font-family: "Barlow";
+  font-weight: lighter;
+  font-size: 22px;
+  background-color: #fff;
+  border-radius:4px;
+  box-shadow: 0 2px 2px 0 #0004;
+}
+.calDayDiv:hover:active {
+  translate: 2px  2px;
+  box-shadow: none;
+}
+.calDaySel {
+  border-width: 4px;
+  border-style: dotted;
+  border-color: olivedrab;
+  /* font-size:30px; */
+  font-style:italic;
+  font-weight: bolder;
+  /* background-color: blue;
+  text-decoration-style:double;
+  text-decoration-line:blink;
+  text-decoration-color:#000; */
+}
+.calWeekend { /* weekend */
+  background-color: indianred;
+}
+.calToday {
+  /* font-family: "Arial","Helvetica",sans-serif; */
+  font-weight:bold;
+  /* font-size:x-large; */
+  text-decoration: underline;
+  /* color: #343; */
+  /* background-color:lightgoldenrodyellow; */
+}
+/* icon or label inside a calDayDiv */
+.calEventIcn {
+  vertical-align: top;
+  display: inline-block;
+  font-family: "Icons";
+  font-style: normal;  /* important: always normal!! Italic icons look awful. */
+  font-weight: 400;
+  font-size:22px;
+  color:#252d;
+  margin-left:2px;
+}
+.calEvType0 {  /* holidays */
+  /* color:firebrick; */
+  background-color: mistyrose;
+  /* background-color: lightgreen; */
+}
+.calEvType4 { /* general reminders */
+  background-color: lightyellow;
+}
+.calEvType1 { /* talks (even on a holiday) */
+  background-color: lightgreen;
+  /* color:navy; */
+}
+.calEvType2 { /* meetings (even on a holiday) */
+  background-color: lightblue;
+  /* color: #400; */
+}
+.calEvType3 { /* contests/exams/tests */
+  background-color: yellow;
+}
+.calEvType5, .calEvType6, .calEvType7 {
+  background-color: skyblue;
+}
+
+.evPickerDlg {
+  position: fixed;
+  padding: 4px;
+  /* top:6px; left:6px;
+  right:6px; */
+  top:2px;
+  left:50%;
+  /* width:75%; */
+  /* width:300px; */
+  display:grid;
+  grid-template-rows: 44px 40px calc(100% - 84px);
+
+  height:calc(50vh - 2px);
+  width:max(300px, 75vw);
+  min-width:260px;
+  max-width:500px;
+  max-height:500px;
+  min-height:160px;
+
+  box-shadow: 0 8px 8px 0 #0004;
+  background-color: olivedrab;
+  border-radius:4px;
+  border-style: outset;
+  border-width: 3px;
+  border-color: #fff;
+
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index:2;
+}
+.evPickerDateTxt {
+  width:calc(100% - 128px);
+  display:inline-block;
+  color: #fff;
+  font-family:"Barlow";
+  font-size:22px;
+  /* font-weight:bold; */
+  vertical-align: middle;
+}
+.textEdit {
+  box-sizing: border-box;
+  touch-action: pan-x pan-y;
+  font-size:16px;
+  border-style:inset;
+  border-width:2px;
+  border-color:#fff;
+  /* display:table-row; */
+  background-color: #f8f8f8;
+  resize:none;
+}
+.textEdit:disabled{
+  background-color: #eee8;
+}
+.dayEvSel {
+  margin-bottom:4px;
+  width:calc(100% - 100px);
+  height:36px;
+}
+#dayEvIcnSel {
+  width:100px;
+}
+/* #dayEvIcnSel option {
+  font-family: "Icons";
+} */
+
+/*************************************************
+ *  List based Picker
+ *************************************************/
+.pickListDlgDiv {
+  touch-action: pan-x pan-y;
+  position: fixed;
+  padding: 4px;
+  /* top:6px; left:6px;
+  right:6px; */
+  top:10px;
+  left:50%;
+  width:75%;
+  overflow: auto;
+  /* width:300px; */
+
+  min-width:260px;
+  max-width:600px;
+  max-height:calc(100vh - 60px); /*600px;*/
+
+  box-shadow: 0 8px 8px 0 #0004;
+  background-color: orange;
+  border-radius:4px;
+  z-index:2;
+}
+.pickListDlgDiv#pollsDlgDiv {
+-ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.pickListDlgDiv#itemPickerDlg {
+  min-width:auto;
+  max-width:auto;
+  max-height:auto;
+}
+.pickListDlgDiv#itemPickerDlg {
+  background-color: #676;
+}
+button#btnClosePolls {
+  position: relative;
+  width:38px;
+  height:38px;
+  top:0px;
+  /* left:calc(100% - 36px); */
+  right:0px;
+}
+.pickListTitleTab {
+  background-color: #121;
+  margin:0;
+  padding:0;
+  border-collapse: collapse;
+  vertical-align: middle;
+  /* border-style:solid;
+  border-color: #fff;
+  border-width: 0px 0px 1px 0px; */
+}
+.pickListTitleTab .appBtn {
+  margin:1px;
+  height:36px;
+  width:36px;
+  display: inline-block;
+}
+.pickListTitle {
+  vertical-align:top;
+  font-family: "Barlow";
+  font-weight: bold;
+  font-size:20px;
+  color: #fff;
+  width:100%;
+}
+.pickListDiv {
+  display: grid;
+  grid-template-columns:100%;
+  padding:0;
+  margin:0;
+}
+.pickListItemBtn{
+  /* font-family: "Arial","Helvetica",sans-serif; */
+  height:34px;
+  width:auto;
+  vertical-align:top;
+  margin:0px;
+  padding:0px 0px 0px 3px;
+  font-family: "Barlow";
+  font-weight: lighter;
+  font-size: 22px;
+  background-color: gold;
+  border-radius:4px;
+  box-shadow: 0 2px 2px 0 #0004;
+  border-width: 0;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space:nowrap;
+}
+.pickListActnBtn{
+  height:34px;
+  width:34px;
+  font-family: "Icons";
+  font-size:22px;
+  border-radius:4px;
+  box-shadow: 0 2px 2px 0 #0004;
+  border-width: 0;
+  margin:0px 0px 0px 3px;
+  padding:0px;
+  color:#565;
+  overflow:hidden;
+  text-align: center;
+  background-color: #ded;
+}
+.pickListDiv#itemListDiv .pickListItemBtn{
+  text-align: left;
+  background-color: #ded;
+}
+.pickListDiv#itemListDiv .pickListItemBtn:enabled:hover {
+  color: darkolivegreen;
+  background-color: #efe;
+}
+.pickListItemBtn:enabled:hover:active, .pickListActnBtn:enabled:hover:active{
+  translate: 2px  2px;
+  box-shadow: none;
+}
+/* .pickListDiv#itemListDiv .pickListDelBtn {
+  text-align: center;
+  background-color: #ded;
+} */
+.pickListDiv#itemListDiv .pickListActnBtn:enabled:hover {
+  color: #b00;
+  background-color: #f0fff0;
+}
+
+
+
+.fileOpsDlg {
+  position: fixed;
+  padding: 4px;
+  top:0;
+  left:50%;
+  width:75%;
+
+  min-width:260px;
+  max-width:600px;
+
+  box-shadow: 0 8px 8px 0 #0004;
+  background-color: #fff;
+  border-radius:4px;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index:2;
+}
+.fileOpsDlg table {
+  border-collapse: collapse;
+  margin:0;
+  border:0;
+  padding:0;
+  width:100%;
+}
+.fileOpsDlg input {
+  box-sizing: border-box;
+  width:calc(100% - 8px);
+  height:32px;
+}
+.fileOpsDlg button {
+  margin:4px;
+}
+button#fileOpsRenBtn {
+  margin-left:0px;
+}
+
+.editorDlg {
+  display:grid;
+  position: fixed;
+  padding: 0; /*4px;*/
+  top:2px;
+  left:50%;
+  grid-template-rows: 42px auto;
+
+  height:calc(50vh - 40px);
+  width:max(300px, 98vw);
+  min-width:260px;
+  /* max-width:1000px; */
+  /* max-height:800px; */
+  min-height:160px;
+  /* min-width:260px;
+  max-width:600px; */
+
+  box-shadow: 0 8px 8px 0 #0004;
+  background-color: #eee;
+  /* border-radius:4px;
+  border-style: outset;
+  border-width: 2px;
+  border-color: #aaa; */
+
+  /* -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%); */
+  z-index:2;
+}
+.editorUITab {
+  width:100%;
+  background-color: #eee;
+  margin:0;
+  padding:0;
+  border-collapse: collapse;
+  vertical-align: top;
+  /* border-style:solid;
+  border-color: #fff;
+  border-width: 0px 0px 1px 0px; */
+}
+.editorUITab .appBtn {
+  vertical-align: top;
+  margin-top:-2px;
+  margin-bottom:6px;
+}
+.editorDlg .tabDiv button {
+  font-weight: 400;
+  font-style:normal;
+  background-color: #aaa;
+  color:#000;
+}
+.editorDlg .tabDiv button:enabled:hover{
+  background-color: #fff;
+}
+.editorDlg .tabDiv button.selected, .editorDlg .tabDiv button.selected:enabled:hover  {
+  background-color: #ccc;
+}
+.editorDlg .tabDivTd {
+  width:100%;
+}
+#edTitleTr table {
+  height:100%;
+  width:100%;
+}
+#edDateBtn {
+  margin-top:-4px;
+}
+#edTitleTr, #edBodyTr, #edPreviewTr {
+  background-color: #ccc;
+  padding:4px;
+}
+#edBodyTr textarea, #edTitleEdit {
+  box-sizing: border-box;
+  font-family:monospace;
+  width:100%;
+  margin-bottom:4px;
+  font-size:18px;
+}
+#edDateBox {
+  border-width:0px;
+  color:#000;
+  background-color:#ccc;
+  width:140px;
+}
+#edTitleTr input {
+  height:30px;
+}
+#edBodyTr, #edBodyTr textarea {
+  height:100%;
+}
+#edPreviewTr >div {
+  position:inherit;
+  box-sizing: border-box;
+  /* padding:8px; */
+  padding:0px;
+  /* height:calc(100vh - 130px); */
+  /* height:100%; */
+  width:100%;
+  background-color:#fff;
+  /* overflow:auto; */
+}
+.icnPickBtn {
+  font-family:"Icons";
+  font-size:20px;
+  color:#000;
+  text-align:center;
+  /* padding:-4px 0 0 -4px; */
+  padding:0px;
+  height:34px;
+  width:34px;
+  border-radius:2px;
+}
+.icnPickBtn.selected, .icnPickBtn:enabled:hover:active {
+  background-color:#fff;
+  border-width:0;
+  transform: translate(1px,1px);
+}
+
+
+.pollExpTimeBox {
+  font-family: "Courier New", Courier, monospace;
+  margin-top:8px;
+  text-align: center;
+}
+
+
+/*************************************************
+ *  Poll View Dialog
+ *************************************************/
+ .pollViewDlgDiv {
+  /* touch-action: pan-x pan-y; */
+  position: absolute;
+  padding: 0px;
+  /* top:6px; left:6px;
+  right:6px; */
+  top:0px;
+  left:50%;
+  width:calc(100vw - 30px);
+  /* height:60%; */
+  /* width:300px; */
+
+  min-width:260px;
+  max-width:700px;
+  /* max-height:calc(100vh - 48px); */
+
+  /* overflow:auto; */
+
+  box-shadow: 0 8px 8px 8px #0008;
+  background-color:papayawhip;
+   /* snow; */
+  /* mintcream; */
+   /* khaki; */
+  border-radius: 4px; /*0 0 4px 4px;*/
+
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index:2;
+}
+#pollListDiv .pickListItemBtn {
+  margin-top:5px;
+}
+.pollTitleBar {
+  /* position: absolute; */
+  /* top:-38px; */
+  height:38px;
+  width:100%;
+  margin:0;
+  padding: 0px;
+  /* background-color:red; */
+  /* display:grid;
+  grid-template-columns: auto 38px; */
+}
+.scrollableBody {
+  touch-action: pan-x pan-y;
+  overflow:auto;
+  max-height:calc(100vh - 70px);
+  padding:6px;
+  margin:0px 4px 4px 4px;
+}
+button#btnClosePollView {
+  /* position: relative; */
+  position:fixed;
+  width:36px;
+  height:36px;
+  top:1px;
+  right:4px;
+  box-shadow: 3px 3px 3px 2px #0004;
+  /* border-radius: 0 4px 0 0; */
+  /* border-radius: 4px; */
+  background-color: #fff;
+  /* top:0px; */
+  /* left:calc(100% - 36px); */
+  /* right:0px; */
+}
+button#btnClosePollView:enabled:hover:active {
+  /* padding-top:2px;
+  padding-left:2px; */
+  /* transform: none; */
+  box-shadow: none;
+}
+.pollTitle {
+  vertical-align:top;
+  font-family: "Barlow";
+  font-weight: bold;
+  font-size:20px;
+  color: white;
+  /* width:100%; */
+  border-radius: 4px 4px 0 0; /*4px 0px 0px;*/
+  padding: 4px 8px 4px 8px;
+  /* margin-right:4px; */
+  background-color: orange;
+}
+.pollChoicesDiv {
+  display: grid;
+  grid-template-columns:100%;
+  padding:0;
+  margin:0;
+}
+.pollDesc {
+  /* max-height:80vh; */
+  /* overflow:auto; */
+  /* touch-action: pan-x pan-y; */
+  font-family: "Times New Roman", Times, serif;
+  font-size:20px;
+}
+.voteChoiceBtn {
+  /* font-family: "Arial","Helvetica",sans-serif; */
+  font-family: "Barlow";
+  font-weight: lighter;
+  font-size: 22px;
+  background-color: #fff;
+  /* cornsilk; */
+  border-radius:4px;
+  box-shadow: 2px 2px 2px 2px #0004;
+  border-width: 0;
+  margin-top:6px;
+}
+.voteChoiceBtn:enabled:hover:active {
+  translate: 2px  2px;
+  box-shadow: none;
+}
+.voteChoiceBtn:disabled {
+  box-shadow: none;
+  color: #000;
+}
+.voteChoiceBtnBold {
+  font-weight: bold;
+}
+.pollExpTimeBox {
+  height:65px;
+}
+
+
+/***********************************************
+ *  Tab like buttons
+ ***********************************************/
+.tabDiv {
+    /* padding: 0px 10px 0px; */
+    padding:0px;
+    overflow: hidden;
+    margin-bottom: -1px;
+    height: 40px;
+    vertical-align: bottom;
+}
+.tabDiv button {
+  font-family: "Icons";
+  width:40px;
+  font-weight:normal;
+  font-size:26px;
+
+  vertical-align:bottom;
+  float: left;
+  height: 31px;
+  line-height: 34px;
+  -webkit-border-radius: 8px 8px 0 0;
+  -moz-border-radius: 8px 8px 0 0;
+  border-radius: 8px 8px 0 0;
+  background: #454; /*#ddd;*/
+  border: 0px;
+  padding: 0px 4px;
+  color: gold;
+  margin:8px 2px 0px 2px;
+  text-decoration: none;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.tabDiv button:enabled:hover {
+  margin:6px 2px 0px 2px;
+  height: 33px;
+  background: #787;
+}
+.tabDiv button.selected, .tabDiv button.selected:enabled:hover {
+    font-size:30px;
+    background: #676;
+    height:38px;
+    margin:2px 1px 0px 1px;
+}
+.tabDiv button:disabled{
+  color: #232;
+}
+
+
+.docSrc_talks::before {
+  content:"\ea19"; /* the book icon */
+  font-family: "Icons";
+  font-size:20px;
+  display:inline-block;
+  width:24px;
+  color: darkolivegreen;
+}
+
+/* .docType_pdf.docSrc_talks::before{
+  content:"\e415";
+  color: darkolivegreen;
+} */
+
+.docSrc_solve::before {
+  content:"\eb7d"; /* the +-doc icon */
+  font-family: "Icons";
+  font-size:20px;
+  display:inline-block;
+  width:24px;
+  color: darkred;
+}
+
+/* .docType_pdf.docSrc_solve::before{
+  content:"\e415";
+  color: darkred;
+} */
+
+.docSrc_misc::before {
+  content:"\e14d"; /* a generic doc icon */
+  font-family: "Icons";
+  font-size:20px;
+  display:inline-block;
+  width:24px;
+  color: #0005;
+}
+
+.docType_jpg.docSrc_misc::before, .docType_jpeg.docSrc_misc::before, .docType_png.docSrc_misc::before{
+  content:"\e3f4"; /* a generic doc icon */
+  font-family: "Icons";
+  font-size:20px;
+  display:inline-block;
+  width:24px;
+  color: #0005;
+}
+
+.docType_svg.docSrc_misc::before{
+  content:"\f8d3"; /* a generic doc icon */
+  font-family: "Icons";
+  font-size:20px;
+  display:inline-block;
+  width:24px;
+  color: #0005;
+}
+
+</style>
+
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_HTMLorMML">
+  </script>
+  <!-- <script src="crypto-js.js"></script> -->
+  <!-- <script type="text/javascript" src="showdown.min.js"></script> -->
+
+<script src="spath.js"></script><script src="CWA.js"></script><script src="askserver.js"></script><script src="mmahome.js"></script><script src="mmadata.js"></script><script src="blueimp_md5.js"></script>
+
+
+</head>
+
+<body onload="initPage()">
+<!-- <body> -->
+
+<div id="noScriptMsg" style="text-align:center; padding:40px;" class="fadein">
+ <img src="MM-IsoCube.svg"></img>
+ <h1>This portal requires JavaScript to operate</h1>
+</div>
+
+
+
+<div id="topBtns" class="btnsGridDiv" style="display:none;">
+  <button id="btnNews" title="News and announcements" class="appBtn"><div class="appBtnIcn">&#xef49;</div><div class="appBtnTxt">News</div></button>
+  <!-- <div class="appBtn"><div class="appBtnIcn">&#xe05e;</div><div class="appBtnTxt">News</div></div> -->
+  <!-- <div class="appBtn"><div class="appBtnIcn">&#xe7f7;</div><div class="appBtnTxt">News</div></div> -->
+  <!-- <button id="btnDiscord"  title="About our Discord group" class="appBtn"><div class="appBtnIcn">&#xe0bf;</div><span class="appBtnTxt">Discord</span></button> -->
+  <button id="btnEvents" title="Upcoming events" class="appBtn"><div class="appBtnIcn">&#xebcc;</div><div class="appBtnTxt">Events</div></button>
+  <button id="btnPolls"  title="Cast your vote" class="appBtn"><div class="appBtnIcn">&#xe175;</div><span class="appBtnTxt">Polls</span></button>
+  <!-- <button id="btnPolls"  title="Cast your vote" class="appBtn"><div class="appBtnIcn">&#xe172;</div><span class="appBtnTxt">Polls</span></button> -->
+  <!-- <button id="btnDemos" title="Some Math demos" class="appBtn"><div class="appBtnIcn">&#xe9fe;</div><div class="appBtnTxt">Demos</div></button> -->
+  <button id="btnQuiz"  title="Do a fun quiz" class="appBtn"><div class="appBtnIcn">&#xe799;</div><span class="appBtnTxt">Quiz</span></button>
+  <!-- <button id="btnQuiz"  title="Do a fun quiz" class="appBtn"><div class="appBtnIcn">
+    <svg height="40" width="40"><path d="M15.833 36.667q-3.125 0-5.312-2.188-2.188-2.187-2.188-5.312 0-1.375.646-2.584.646-1.208 2.229-2.791.5-.5.813-.854.312-.355.729-.855-2.125-3.25-3.271-6.812-1.146-3.563-1.146-6.938 0-2.416.875-3.708.875-1.292 2.459-1.292 1.958 0 3.833 1.896 1.875 1.896 3.125 4.438.417.833.75 1.708T20 13.292q.292-1.042.625-1.917t.75-1.708q1.25-2.542 3.125-4.438t3.833-1.896q1.584 0 2.459 1.292t.875 3.708q0 3.375-1.146 6.938-1.146 3.562-3.271 6.812.417.5.729.855.313.354.813.854 1.583 1.583 2.229 2.791.646 1.209.646 2.584 0 3.125-2.188 5.312-2.187 2.188-5.312 2.188-1.875 0-3.021-.417L20 35.833l-1.146.417q-1.146.417-3.021.417Zm0-2.792q.792 0 1.75-.229.959-.229 1.959-.688-.459-.208-.834-.708-.375-.5-.375-.875 0-.333.479-.583.48-.25 1.188-.25t1.188.25q.479.25.479.583 0 .375-.375.875t-.834.708q1 .459 1.959.688.958.229 1.75.229 1.958 0 3.333-1.375 1.375-1.375 1.375-3.333 0-.875-.458-1.688-.459-.812-1.375-1.604-.5-.458-1-.958-.5-.5-1.084-1.25Q23.667 22 22.75 21.562q-.917-.437-2.75-.437t-2.75.437q-.917.438-2.208 2.105-.584.75-1.084 1.25-.5.5-1 .958-.916.792-1.375 1.604-.458.813-.458 1.688 0 1.958 1.375 3.333 1.375 1.375 3.333 1.375Zm1.667-5.958q-.333 0-.583-.375-.25-.375-.25-.875t.25-.875q.25-.375.583-.375.333 0 .583.375.25.375.25.875t-.25.875q-.25.375-.583.375Zm5 0q-.333 0-.583-.375-.25-.375-.25-.875t.25-.875q.25-.375.583-.375.333 0 .583.375.25.375.25.875t-.25.875q-.25.375-.583.375Zm-7.833-7.959q.75-.666 1.521-1.02.77-.355 1.812-.48-.167-2.083-.667-4.104t-1.291-3.604q-.917-1.875-2.063-3.125-1.146-1.25-2.396-1.667-.25.5-.354 1.105-.104.604-.104 1.27 0 2.959.917 5.938.916 2.979 2.625 5.687Zm10.666 0q1.709-2.708 2.625-5.687.917-2.979.917-5.938 0-.666-.104-1.27-.104-.605-.354-1.105-1.25.417-2.396 1.667t-2.063 3.125q-.791 1.583-1.291 3.604-.5 2.021-.667 4.104 1.042.125 1.792.48.75.354 1.541 1.02Z"/></svg>
+  </div><span class="appBtnTxt">Quiz</span></button> -->
+  <button id="btnDocs" title="Articles and notes" class="appBtn"><div class="appBtnIcn">&#xe02f;</div><span class="appBtnTxt">Docs</span></button>
+  <!-- <button id="btnQuiz" disabled="true" title="Do a quick Math quiz" class="appBtn"><div class="appBtnIcn">&#xe7c8;</div><span class="appBtnTxt">Quiz</span></button> -->
+  <!-- <button id="btnQuiz" disabled="true" title="Do a casual quiz" class="appBtn"><div class="appBtnIcn">&#xf06c;</div><span class="appBtnTxt">Quiz</span></button> -->
+  <!-- <div class="appBtn"><div class="appBtnIcn">&#xf1c0;</div><span class="appBtnTxt">Quiz</span></div> -->
+  <button id="btnDemos" title="Some Math demos" class="appBtn"><div class="appBtnIcn">&#xea4b;</div><div class="appBtnTxt">Demos</div></button>
+  <button id="btnLogo" title="Replay logo animation" class="appBtn"><div class="appBtnIcn">&#xe068;</div><span class="appBtnTxt">Logo</span></button>
+  <!-- <div class="appBtn"><div class="appBtnIcn">&#xea28;</div><span class="appBtnTxt">Discord</span></div> -->
+  <!-- <button id="btnContact" title="Admin contact info" class="appBtn"><div class="appBtnIcn">&#xf02e;</div><span class="appBtnTxt">Contacts</span></button> -->
+  <button id="btnMenu" title="More..." class="appBtn"><div class="appBtnIcn">&#xe3c7;</div><span class="appBtnTxt">Menu</span></button>
+</div>
+
+
+<!----------------------------------------------------------------------
+
+  User Sign-in Dialog
+
+ ------------------------------------------------------------------------>
+<div class="signinDialogDiv" id="signinDialog" hidden>
+  <table>
+    <tr>
+      <td  class="noselect" id="signinDialogTitle" colspan="3" style="background-color:rgb(84, 110, 158);">Cloud Storage Sign In</td>
+    </tr>
+    <tr>
+      <td>
+          <span  class="noselect">Member Id</span>
+      </td>
+      <td style="padding:3px; margin: 2px;">
+          <input autocorrect="off" autocapitalize="none" autocomplete="off" class="dialogTextInput" id="userNameInput" placeholder="5+ chars" type="text"/>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="noselect">
+          <span id="pwdInpLabel">Member Password</span>
+      </td>
+      <td style="padding:3px; margin:2px; display:table-cell;">
+          <input autocorrect="off" autocapitalize="none" autocomplete="off" class="dialogTextInput" id="passwordInput" placeholder="8+ chars" type="password"/>
+      </td>
+      <td><button type="button" class="revealPwdBtn" id="revealPwdBtn">&#xe8f4;</button></td>
+    </tr>
+  </table>
+  <div class="dialogDismissButtonsDiv">
+    <button type="button" class="dialogButton" id="signinCancelBtn">Cancel</button>
+    <button type="button" class="dialogButton" id="siNewUserBtn">Add User</button>
+    <button type="button" class="dialogButton" id="siChgPwdBtn">Chg Passwd</button>
+    <button type="button" class="dialogButton" id="signinOKBtn">Sign In</button>
+  </div>
+</div>
+
+<div class="signinDialogDiv" id="retypePwdDialog" hidden>
+  <table>
+    <tr>
+      <td  class="noselect" id="pwd2DlgTitle" colspan="3" style="background-color:orange;"
+        >Retype Your Current Password</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="noselect" id="pwd2Desc"></td>
+    </tr>
+    <tr>
+      <td class="noselect">
+          <span id="pwd2InputDesc">Current Password</span>
+      </td>
+      <td style="padding:3px; margin:2px; display:table-cell;">
+          <input autocorrect="off" autocapitalize="none" autocomplete="off" class="dialogTextInput" id="pwd2Input" placeholder="curr passwd" type="password"/>
+      </td>
+      <td><button type="button" class="revealPwdBtn" id="revealPwd2Btn">&#xe8f4;</button></td>
+    </tr>
+  </table>
+  <div class="dialogDismissButtonsDiv">
+    <button type="button" class="dialogButton" id="pwd2CancelBtn">Cancel</button>
+    <button type="button" class="dialogButton" id="pwd2OKBtn">Proceed</button>
+  </div>
+</div>
+
+
+
+<!----------------------------------------------------------------------
+  News List Dialog
+ ------------------------------------------------------------------------>
+<div class="newsDlgDiv" id="newsDlgDiv" style="display:none;">
+  <button id="btnCloseNews" title="Close Club News" class="appBtn"><div class="appBtnIcn">&#xe5cd;</div></button>
+</div>
+
+
+<!----------------------------------------------------------------------
+  List Picker Dialog
+ ------------------------------------------------------------------------>
+ <div class="pickListDlgDiv" id="itemPickerDlg" style="display:none;">
+  <table class="pickListTitleTab" id="pickListTitleTab"><tr>
+    <td class="pickListTitle" id="itemPickerTitle">
+      <div class="tabDiv">
+        <button type="button" id="docsTab" class="selected" title="Docs">&#xe14d;</button>
+        <button type="button"  id="newsTab" disabled="true" title="News">&#xef49;</button>
+        <button type="button"  id="pollTab" disabled="true" title="Polls">&#xe175;</button>
+        <button type="button"  id="trashTab" disabled="true" title="Trashed">&#xe938;</button>
+      </div>
+    </td>
+    <td><button id="uploadItemsBtn" title="Upload Docs"
+      class="appBtn noTxt"><div class="appBtnIcn">&#xe255;</div>
+      </button><button id="newItemBtn" title="Create New" class="appBtn noTxt"><div
+      class="appBtnIcn">&#xe05e;</div></button></td>
+    <td><button id="btnCloseItemPicker" title="Close Doc Picker" class="appBtn"><div class="appBtnIcn">&#xe5cd;</div></button></td>
+  </tr></table>
+  <div class="pickListDiv" id="itemListDiv">
+        <!-- Available documents -->
+  </div>
+  </div>
+
+<!----------------------------------------------------------------------
+  File Ops Dialog
+ ------------------------------------------------------------------------>
+  <div class="fileOpsDlg" id="fileOpsDlg" style="display:none;">
+    <table class="fileOpsUITab" id="fileOpUITab">
+      <tr>
+        <td style="width:40px;"><button id="fileOpRenBtn" class="appBtn noTxt" title="Change name"><div class="appBtnIcn">&#xe3c9;</div></button></td>
+        <td><input id="fileNmInp"></td>
+      </tr>
+      <tr><td colspan="2">
+        <button id="fileOpDelBtn" class="dialogButton dangerFlushLeft">Delete</button>
+        <!-- <button id="fileOpRenBtn" class="dialogButton flushRight">Rename</button> -->
+        <button id="fileOpCancelBtn" class="dialogButton flushRight">Close</button>
+        <button id="fileOpDoRenBtn" class="dialogButton flushRight">Rename</button>
+      </td></tr>
+    </table>
+  </div>
+
+
+<!----------------------------------------------------------------------
+  Poll Picker Dialog
+ ------------------------------------------------------------------------>
+<div class="pickListDlgDiv" id="pollsDlgDiv" style="display:none;">
+<table><tr>
+  <td class="pickListTitle" id="pollPickerTitle">
+  Select a poll to view the results or cast your vote.
+  </td>
+  <td colspan=2 style="vertical-align:top;"><button id="btnClosePolls" title="Close Poll Picker" class="appBtn"><div class="appBtnIcn">&#xe5cd;</div></button></td>
+</tr></table>
+<div class="pickListDiv" id="pollListDiv"></div>
+</div>
+
+
+<!----------------------------------------------------------------------
+  Poll View Dialog: display the results of a poll or as a voting UI
+ ------------------------------------------------------------------------>
+<div class="pollViewDlgDiv" id="pollViewDlgDiv" style="display:none;">
+  <!-- <div class="pollTitleBar">
+    <div class="pollTitle" id="pollTitle"></div>
+    <button id="btnClosePollView" title="Close Poll View" class="appBtn"><div class="appBtnIcn">&#xe5cd;</div></button>
+  </div> -->
+  <button id="btnClosePollView" title="Close Poll View" class="appBtn"><div class="appBtnIcn">&#xe5cd;</div></button>
+  <div class="pollTitle" id="pollTitle"></div>
+  <div class="scrollableBody">
+    <div class="pollDesc" id="pollDesc"></div>
+    <div class="pollChoicesDiv" id="pollChoicesDiv"></div>
+  </div>
+</div>
+
+
+<!----------------------------------------------------------------------
+  File Picker Dialog for uploading files to server
+ ------------------------------------------------------------------------>
+ <div class="fileInputDlg" id="fileInputDlg" style="display:none;">
+  <div id="filePickerTitle">
+  Upload to Server
+  <button id="btnCloseFilePicker" title="Close" class="appBtn noTxt flushRight"><div class="appBtnIcn">&#xe5cd;</div></button>
+  </div>
+  <select id="fileInpType">
+    <option selected="true" disabled="true" value="default">Server destination ?</option>
+    <option value="talks">Dest: docs/talks</option>
+    <option value="solve">Dest: docs/solve</option>
+    <option value="misc">Dest: docs/misc</option>
+  </select>
+  <input type="file" id="fileInp" name="fileInp" accept=".pdf,.txt" multiple>
+  <label class="fileInp" id="fileInpLabel" for="fileInp"><div></div></label>
+</div>
+
+<!----------------------------------------------------------------------
+  Editor Dialog (for editing news or other multi-field records)
+ ------------------------------------------------------------------------>
+ <div class="editorDlg" id="editorDlg" style="display:none;">
+  <table class="editorUITab" id="editorUITab">
+    <tr><td class="tabDivTd">
+      <div class="tabDiv">
+        <button type="button" id="edTitleBtn" class="selected" title="Edit Title">&#xe264;</button>
+        <button type="button"  id="edBodyBtn" title="Edit Body">&#xe745;</button>
+        <button type="button"  id="edPreviewBtn" title="Preview">&#xf1c5;</button>
+      </div>
+    </td>
+    <td><button id="edCommitBtn" class="appBtn noTxt" title="Submit"><div class="appBtnIcn">&#xe92f;</div></button></td>
+    <td><button id="edCancelBtn" class="appBtn noTxt" title="Cancel"><div class="appBtnIcn">&#xe5cd;</div></button></td>
+    </tr>
+  </table>
+  <div id='edTitleTr'>
+      <table>
+        <tr>
+          <td><span id="expDateInf">Expiration date: </span><input id="edDateBox" placeholder="Expiration Date" disabled="true"></td>
+          <td style="width:40px;"><button id="edDateBtn" class="appBtn noTxt" title="Date Picker"><div class="appBtnIcn">&#xe878;</div></button></td>
+        </tr>
+        <tr><td colspan="2" ><input id="edTitleEdit" placeholder="Headline"></td></tr>
+        <tr><td id="edIcnPickDiv" colspan="2" style="height:100%; vertical-align:top;"></td></tr>
+      </table>
+  </div>
+  <div id='edBodyTr'>
+    <textarea class="textEdit" id="edBodyEdit" placeholder="Text and mark-up here"></textarea>
+  </div>
+  <div id='edPreviewTr'>
+    <div id='edPreviewDiv'>
+    (preview area)
+    </div>
+  </div>
+</div>
+
+<!----------------------------------------------------------------------
+  Calendar Dialog
+ ------------------------------------------------------------------------>
+ <div class="calDlgDiv" id="calDlgDiv" style="display:none;">
+  <table class="calDlgTab">
+    <tr><td class="calBtnsTd" colspan="7">
+      <div class="calBtnsDiv">
+
+      <!-- <button id="btnNxtMon" title="Prev Month" class="appBtn"><div class="appBtnIcn">&#xe3cb;</div><span class="appBtnTxt">Next</span></button> -->
+      <button id="btnPrvMon" title="Prev Month" class="appBtn noTxtBtn"><div class="appBtnIcn">&#xf1e6;</div></button>
+      <!-- <button id="btnNxtMon" title="Next Month" class="appBtn"><div class="appBtnIcn">&#xe3cd;</div><span class="appBtnTxt">Prev</span></button> -->
+      <span id="calShowMonTxt">MON</span>
+      <button id="btnNxtMon" title="Next Month" class="appBtn noTxtBtn"><div class="appBtnIcn">&#xf1df;</div></button>
+      <button id="btnCloseCal" title="Close Calendar" class="appBtn noTxtBtn flushRight"><div class="appBtnIcn">&#xe5cd;</div></button>
+      <button id="btnEditCal" title="Edit Events" class="appBtn noTxtBtn flushRight"><div class="appBtnIcn">&#xe745;</div></button>
+    </td></tr>
+    <tr class="dayofweekLabelsTR"><td>Sun</td><td>Mon</td><td>Tue</td><td>Wed</td><td>Thu</td><td>Fri</td><td>Sat</td></tr>
+    <tr><td height="100%" width="100%" colspan="7">
+      <div class="calendarDiv" id="calendarDiv"></div>
+    </td></tr>
+  </table>
+</div>
+
+<div class="calEventView" id="calEventView" style="display:none;">
+</div>
+
+<div class="evPickerDlg" id="evPickerDlg" style="display:none;">
+  <div class="evPickerBtns" id="evPickerBtns">
+    <div class="evPickerDateTxt" id="evPickerDateTxt">date</div>
+    <!-- <button id="editEvBtn" title="Edit An Event" class="appBtn noTxtBtn"><div class="appBtnIcn">&#xe745;</div></button> -->
+    <button id="delEvBtn" title="Delete Event" class="appBtn noTxtBtn"><div class="appBtnIcn">&#xeb80;</div></button>
+    <button id="acceptEvChgsBtn" title="Commit Changes" class="appBtn noTxtBtn"><div class="appBtnIcn">&#xe065;</div></button>
+    <button id="cancelEvChgsBtn" title="Cancel" class="appBtn noTxtBtn"><div class="appBtnIcn">&#xe5cd;</div></button>
+  </div>
+  <div>
+  <select class="dayEvSel" id="dayEvIcnSel" title="Event Type">
+    <option value="reminder">&#x2691; Note</option>
+    <option value="test/exam/contest">&#x2318; Work</option>
+    <option value="meeting">&#x2663; Meet</option>
+    <option value="learn">&#x2385; Talk</option>
+    <option value="home">&#x2617; Home</option>
+  </select><select class="dayEvSel" id="dayEvSel"></select>
+  </div>
+  <textarea class="textEdit" id="evDescEdit" placeholder="Event Description"></textarea>
+</div>
+
+</body>
+</html>
