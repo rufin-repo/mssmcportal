@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html><head>
+  <title>L'Aventurier Vrai</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<style>@font-face{font-family:LCD;font-style:normal;font-weight:400;src:local('LCD'),url(rsrc/LCD14.otf)}@font-face{font-family:Icons;font-style:normal;font-weight:400;src:local('Icons'),url(rsrc/MaterialIconsOutlined-Regular.otf)}@font-face{font-family:BarlowC;font-style:normal;font-weight:400;src:local('BarlowC'),url(rsrc/BarlowCondensed-Light.ttf)}@font-face{font-family:Typewriter;font-style:normal;font-weight:400;src:local('Typewriter'),url(rsrc/gtw.ttf)}body,html{touch-action:pan-x pan-y;padding:0;margin:0;box-sizing:border-box;--ttl1:darkorange;--ttl1i:chocolate;--ttl3:gold;--ttl3i:darkgoldenrod;--ttl2:darkseagreen;--ttl2i_o:seagreen;--ttl2i:#663;--hoverBg:#ffffef;--hoverBg2:#fafff3;--txtClr1:#454;font-family:Typewriter;font-size:16px}#btnDiv{position:fixed;left:0;top:0;height:40px;width:100vw;background-color:#220}#mazeDiv{position:fixed;left:0;top:40px;height:calc(100vw - 40px);width:100vw}.gameList{box-sizing:content-box;position:relative;left:0;top:0;width:calc(100% - 8px);height:calc(100% - 44px);overflow:auto;display:grid;grid-template-rows:repeat(auto-fill,66px);background-color:transparent;padding-left:4px;padding-right:4px;padding-top:0;padding-bottom:0}.gameList>div{user-select:none;box-sizing:content-box;overflow:hidden;margin-top:2px;margin-bottom:2px;background-color:"#fff";height:64px;display:grid;grid-template-columns:70px auto;min-height:0;font-family:'Courier New';font-size:18px}div.lvlSelected{background-color:#bdb76b;color:#556b2f;font-weight:900;font-size:20px}div.lvlSelected:hover{background-color:olive}.gameList div:hover{background-color:#eee8aa}.gameList div:active:hover{background-color:olive}.diffTxt{float:right;font-family:Icons;font-size:18px;margin-right:15px}#lvlPicker{box-sizing:border-box;position:fixed;left:10px;top:44px;min-width:220px;height:calc(100vh - 60px);height:calc(var(--vh,1vh) * 100 - 60px);max-width:80vw;border-radius:6px;box-shadow:12px 12px 16px #0008;background-color:ivory;overflow:hidden;padding-bottom:0}#lvlPicker>div#pickerTitle{font-family:sans-serif;font-weight:900;font-size:24px;box-sizing:border-box;padding-left:8px;padding-right:8px;padding-top:4px;padding-bottom:4px;position:relative;left:0;top:0;height:40px;width:100%;background-color:#8fbc8f;color:#fff}#lvlPicker>div button{float:right;background-color:#eee8aa;border:none;margin-top:0}#gfxCanv{position:absolute;top:0;left:0;padding:0;margin:0}.lcd{float:left;font-family:LCD;font-size:30px}.closeBtn,.cmdBtn{width:32px;height:32px;border-radius:16px;margin-top:3px;margin-left:3px;margin-right:1px;background-color:#cc9;border-width:0;padding:1px;vertical-align:middle;font-family:Icons;font-size:24px;color:#321;padding-left:4px;text-align:left}.cmdBtn:disabled{color:#0004}.closeBtn:hover,.cmdBtn:hover{background-color:#eee;color:#ff8c00}.closeBtn:hover:active,.cmdBtn:hover:active{transform:translate(2px,2px);color:brown}.btnTxt{display:none;vertical-align:top;font-family:BarlowC;font-size:22px;padding-left:0;margin:0}@media only screen and (orientation:landscape){.cmdBtn{width:114px}.btnTxt{display:inline;margin-left:8px}#lvlPicker{top:40px;left:50px}}@media only screen and (orientation:portrait) and (min-width:850px){.cmdBtn{width:114px}.btnTxt{display:inline;margin-left:8px}}#moveCount{box-sizing:border-box;display:block;height:40px;padding-top:10px;margin-right:8px;text-align:right;font-family:LCD;font-size:18px;float:right;color:#aaa}.wonTxt#moveCount{color:#9acd32;animation:wonBlinker 1s linear infinite}@keyframes wonBlinker{50%{opacity:0}}.spinner{position:fixed;background:0 0;top:50%;left:50%;margin-top:-40px;margin-left:-40px;padding:0;border-left:8px solid #898;border-top:8px solid rgba(182,204,187,.2);border-right:8px solid rgba(182,204,187,.2);border-bottom:8px solid rgba(182,204,187,.2);border-radius:50%;width:80px;height:80px;-webkit-animation:spin 2s linear infinite;animation:spin 2s linear infinite;z-index:5}@-webkit-keyframes spin{0%{-webkit-transform:rotate(0)}100%{-webkit-transform:rotate(360deg)}}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}#navInfo{position:fixed;left:calc(100vw - 100px);top:calc(100vh - 50px);top:calc(var(--vh,1vh) * 100 - 50px);width:80px;height:30px;background-color:#fd04;color:#556b2f;font-size:25px;font-family:sans-serif;vertical-align:top;text-align:center;border-radius:8px;border-color:olive;border-style:ridge}#navInfo::before{content:"\eac3";font-family:Icons;font-size:20px;padding-right:3px}#navInfo.Prox0::before{content:"\f067"}#navInfo.Prox1::before{content:"\ebe4"}#navInfo.Prox2::before{content:"\ebd6"}#navInfo.Prox3::before{content:"\ebe1"}#navInfo.Prox4::before{content:"\e1d8"}#navInfo.ProxBad::before{content:"\f063"}#aboutBoxDiv{box-sizing:border-box;position:fixed;left:20px;top:20px;width:calc(100vw - 40px);height:calc(100vh - 40px);height:calc(var(--vh,1vh) * 100 - 40px);max-width:700px;background-color:#556b2f;overflow:hidden;padding:6px;border-radius:8px;box-shadow:12px 12px 16px #0008;font-family:Typewriter}#closeAbtBox{position:absolute;left:calc(100% - 52px);top:4px;background-color:#4443}#aboutBoxContentDiv{touch-action:pan-y;box-sizing:border-box;position:relative;left:0;top:0;width:100%;height:100%;overflow:auto;padding:8px;background-color:ivory;border-radius:2px}.abtTitleBand{display:block;background-color:#ed8;border-radius:4px;border-width:0;padding:5px;box-shadow:8px 8px 8px #0002;color:#242;font-size:26px;text-shadow:3px 3px 7px #0006}.content{font-family:TypeWriter}.content b{font-family:Typewriter;font-style:bold;font-stretch:condensed;color:olive}.content h2,.content h3,.content h4{font-family:Typewriter;color:#6b8e23;margin-bottom:10px}.icon,h6{font-family:Icons;font-size:22px}.content em{color:#556b2f}.collapsable>input[name=expandBox]{display:none}.collapsable label{font-family:TypeWriter;font-size:26px;margin:0 auto}.collapsable .content{font-weight:400;font-size:18px;margin-left:40px;color:var(--txtClr1)}.collapsable .content{transform-origin:30% 0;transform:perspective(500px) rotateX(-90deg);overflow:hidden;max-height:0;transition:max-height .5s,transform .5s}.collapsable>input[name=expandBox]:checked~.content{transform-origin:30% 0;transform:perspective(500px) rotateX(0);max-height:100vh;max-height:calc(var(--vh,1vh) * 100);transition:max-height .5s,transform .5s}.collapsable>input[name=expandBox]:checked~.content{border-top:0;transition:.3s}.collapsable label{display:block;margin:0;color:var(--ttl2);cursor:pointer;font-weight:400;padding:10px;background:0 0;user-select:none}.collapsable label:focus,.collapsable label:hover{color:var(--ttl3);background:var(--hoverBg)}.collapsable>input[name=expandBox]:checked~label{color:var(--ttl1);background:0 0}.collapsable>input[name=expandBox]:checked~label:focus,.collapsable>input[name=expandBox]:checked~label:hover{color:var(--ttl2i);background:var(--hoverBg2)}.collapsable label::before{color:var(--ttl2i);font-family:Icons;content:attr(name);display:inline-block;margin-right:10px;font-size:1em;line-height:1em;vertical-align:middle;transform-origin:50% 50%;transition:.4s}.collapsable label:focus::before,.collapsable label:hover::before{color:var(--ttl3i)}.collapsable>input[name=expandBox]:checked~label::before{color:var(--ttl1i);font-family:Icons;content:attr(name);transform:rotate(180deg);transform-origin:50% 50%;transition:.4s}b{color:#708090}a,a>b{color:orange;font-family:TypeWriter2;font-style:bold;font-weight:600}a:visited{color:tan;font-style:normal}img{max-width:70vw;max-height:70vh}</style>
+
+<script>
+var aa="&#xe83a;&#xe83a;&#xe83a;&#xe83a;&#xe83a; &#xe839;&#xe83a;&#xe83a;&#xe83a;&#xe83a; &#xe838;&#xe83a;&#xe83a;&#xe83a;&#xe83a; &#xe838;&#xe839;&#xe83a;&#xe83a;&#xe83a; &#xe838;&#xe838;&#xe83a;&#xe83a;&#xe83a; &#xe838;&#xe838;&#xe839;&#xe83a;&#xe83a; &#xe838;&#xe838;&#xe838;&#xe83a;&#xe83a; &#xe838;&#xe838;&#xe838;&#xe839;&#xe83a; &#xe838;&#xe838;&#xe838;&#xe838;&#xe83a; &#xe838;&#xe838;&#xe838;&#xe838;&#xe839; &#xe838;&#xe838;&#xe838;&#xe838;&#xe838; &#xe838;&#xe838;&#xe838;&#xe838;&#xe838; &#xe838;&#xe838;&#xe838;&#xe838;&#xe838; &#xe838;&#xe838;&#xe838;&#xe838;&#xe838; &#xe838;&#xe838;&#xe838;&#xe838;&#xe838; &#xe838;&#xe838;&#xe838;&#xe838;&#xe838; &#xe838;&#xe838;&#xe838;&#xe838;&#xe838;".split(" ");
+function ba(a,b){null===a.className.match(new RegExp("(\\s|^)"+b+"(\\s|$)"))&&(a.className=(a.className+" "+b).trim())}function ca(){var a=k;null!==a.className.match(RegExp("(\\s|^)wonTxt(\\s|$)"))&&(a.className=a.className.replace(RegExp("(\\s|^)wonTxt(\\s|$)")," ").trim())}function da(){let a="";try{a=window.localStorage.getItem("LAvenLvl"),null===a&&(a="")}catch(b){}return a}function m(a,b){return b.x===a.x&&b.y===a.y}
+class n{constructor(a,b=null){this.y=this.x=-1;if(a instanceof n)if(b instanceof ea){var c=a.y+b.dy;this.x=a.x+b.dx;this.y=c}else"number"===typeof b&&(c=a.y+fa[b],this.x=a.x+ha[b],this.y=c);else"number"===typeof a&&"number"===typeof b&&(this.x=a,this.y=b)}}class ea{constructor(a=-1){0>a||3<a?this.dy=this.dx=0:(this.dx=ha[a],this.dy=fa[a])}}var ha=[0,1,0,-1],fa=[-1,0,1,0];function ia(){ja++;console.log("loaded cell img "+ja+" loaded.");29===ja&&ka(1)}
+function la(){p=[[null,null]];for(let a=0;a<q.length;a++)p[a]=[null,null],0<a&&(p[a][0]=new Image,p[a][0].onload=ia,p[a][0].src="rsrc/Room"+a+"Bot.webp",p[a][1]=new Image,p[a][1].onload=ia,p[a][1].src="rsrc/Room"+a+"Top.webp");u=new Image;u.onload=ia;u.src="rsrc/Pawn.webp"}
+class ma{constructor(a){this.i=q.indexOf(a);0>this.i&&(this.i=0)}get level(){return w[this.i][4]}get F(){return 0===this.i}get type(){return this.i}A(a,b,c,d,e,f,g,h,l){if((f=0<this.i&&this.i<=q.length?p[this.i][0===f?0:1]:null)&&1<f.width&&1<f.height){let r=d.x,t=d.y;if(g){const v=na(g,d);v&&(r+=v.dx*h,t+=v.dy*h)}l||a.drawImage(f,b+(449*r+4)*e,c+(446*t+4)*e,f.width*e,f.height*e);l&&u&&1<u.width&&1<u.height&&(l=u,f=d.x,d=d.y,g&&(g=null===g.h?g.D:null)&&(f+=g.dx*h,d+=g.dy*h),a.drawImage(l,b+(449*f+
+155)*e,c+(446*d+130)*e,l.width*e,l.height*e))}}}var q="x\u2518\u2514\u250c\u2510\u2193\u2191\u2192\u2190\u255d\u255a\u2554\u2557\u2550\u2551".split(""),w=[[0,0,0,0,0],[1,0,0,1,1],[1,1,0,0,1],[0,1,1,0,1],[0,0,1,1,1],[1,0,2,0,1],[2,0,1,0,1],[0,2,0,1,1],[0,1,0,2,1],[2,0,0,2,2],[2,2,0,0,2],[0,2,2,0,2],[0,0,2,2,2],[0,2,0,2,2],[2,0,2,0,2]],p=null,u=null,ja=0;function na(a,b){return null!==a.h&&(m(b,a.h[0])||2===a.h.length&&m(b,a.h[1]))?a.D:null}
+function oa(a){let b=a.g;a.h&&0<a.h.length&&(b|=8+3*a.h[0].y+a.h[0].x<<3,1<a.h.length&&(b|=8+3*a.h[1].y+a.h[1].x<<6));return b}class x{constructor(a,b=null,c=null){this.g=a;null===b?this.h=null:(this.h=[],this.h[0]=b,null!==c&&(this.h[1]=c));this.D=new ea(a);this.H=!1}get P(){return 0===(this.g&1)}get B(){return null===this.h}get O(){return 1===this.g||2===this.g}get dir(){return this.g}}
+class y{constructor(a,b,c){this.l=a;this.o=b;this.s=c;this.g=-1;this.G=null}get v(){return this.g}set v(a){this.g=a}}function pa(a){qa|=a;console.log("board img "+a+" loaded");7===qa&&ka(2)}function ra(){z=new Image;z.onload=()=>{pa(1)};z.src="rsrc/BoardBot.jpg";sa=new Image;sa.onload=()=>{pa(2)};sa.src="rsrc/BoardShdw.webp";ta=new Image;ta.onload=()=>{pa(4)};ta.src="rsrc/BoardTop.webp"}function ua(a){return new n(a%3,Math.floor(a/3))}
+function va(a,b,c,d){a.o=[];for(let e=0;9>e;e++){const f=e%3,g=Math.floor(e/3),h=b.substring(e,e+1),l=q.indexOf(h);if(0>=l)a.l[f][g]=-1;else{let r=0;for(;r<a.o.length&&l!==a.o[r].type;r++);r>=a.o.length&&a.o.push(new ma(h));a.l[f][g]=r}}a.g=new n(c,d);a.s=!1}function A(a,b){return wa(a,b.x,b.y)}function B(a){let b=a.g.x+3*a.g.y+1,c=0,d=0;for(let e=0;3>e;e++)for(let f=0;3>f;f++)0<=a.l[f][e]?d=(d<<3)+a.l[f][e]:c=3*e+f;return(9*b+c<<24)+d}
+function xa(a,b,c=-1){return b instanceof n?m(a.g,b):a.g.x===b&&a.g.y===c}function wa(a,b,c){return 0<=b&&3>b&&0<=c&&3>c?(b=a.l[b][c],0>b?null:a.o[b]):null}function za(a){const b=[];for(let c=0;3>c;c++)for(let d=0;3>d;d++)b.push(0>a.l[d][c]?0:a.o[a.l[d][c]].i);return b}function Aa(a){return a.s?9:3*a.g.y+a.g.x}
+function Ba(a,b,c,d,e,f,g,h){const l=193*e,r=165*e;var t=0<f?Ca:null===g||g&&!g.B&&!g.P?Da:Ea;for(var v=0;9>v;v++){const ya=ua(t[v]),Ta=A(a,ya);Ta&&Ta.A(b,c+l,d+r,ya,e,f,g,h,!1)}1===f&&(t=A(a,a.g),v=a.g,null===t&&a.u&&(v=new n(0,0),t=A(a,v),h=g&&g.H?1.2*(1-h):1.2,g=new x(3)),t&&t.A(b,c+l,d+r,v,e,f,g,h,!0))}
+function Fa(a,b){var c=C,d=D.width,e=D.height;const f=z.width;var g=z.height,h=Math.min(d,e)/Math.max(1.12*f,g);a=(a-Math.floor((d-.88*f*h)/2))/h-193;d=(b-Math.floor((e-g*h)/2))/h-165;b=Math.floor(a/449);e=Math.floor(d/446);return 0<=b&&3>e&&0<=e&&3>e?(h=!1,g=-1,xa(c,b,e)&&(c=449*(a/449%1-.5),a=446*(d/446%1-.5),h=c/80,d=a/105,(h=1>h*h+d*d)||(80>Math.abs(c)&&105<Math.abs(a)?g=0>a?0:2:105>Math.abs(a)&&80<Math.abs(c)&&(g=0>c?3:1))),{m:new n(b,e),N:h,J:g}):null}
+function E(a,b,c=null){null===c&&(c=a.g);var d=A(a,c);if(null===d&&1===b)return(d=A(a,new n(c,b)))&&!d.F&&2===w[d.i][(b+2)%4]?1:0;if(null===d||0===d.level)return 0;c=new n(c,b);-1===c.x&&0===c.y&&2===w[d.i][b]?b=2:(a=A(a,c),d=w[d.i][b],b=a&&!a.F&&d&&d===w[a.i][(b+2)%4]?1:0);return b}
+function Ga(a,b){let c=null,d=!1;var e=A(a,a.g);if(e||null===e&&1===b){var f=new ea(b);let g;if(0===(g=E(a,b)))d=!0,0!==w[e.i][b]&&(c=[new x(b)]);else if(c=[new x(b)],2===g)a.s=!0;else for(e=new n(a.g,f),b=(b+2)%4;1!==A(a,e).level;){f=-1;for(let h=0;4>h;h++)if(h!==b&&0!==(g=E(a,h,e))){f=h;break}0<=f?b=f:d=!0;c.push(new x(b));e=new n(e,b);b=(b+2)%4;if(2===g){a.s=!0;break}}}return c&&c.length?{j:c,C:d}:null}
+function Ha(a,b=-1){var c=C;let d=null;if(null===a||m(a,c.g))0<=b&&(d=Ga(c,b));else if((b=A(c,a))&&!b.F){var e=b=0;for(var f=0;9>f;f++)if(null===wa(c,f%3,Math.floor(f/3))){b=f%3;e=Math.floor(f/3);break}f=[];a.x===b?(e-=a.y,1<Math.abs(e)?c.g.x!==b&&f.push(new x(0<e?2:0,a,new n(a.x,a.y+e/2))):f.push(new x(0<e?2:0,a))):a.y===e&&(b-=a.x,1<Math.abs(b)?c.g.y!==e&&f.push(new x(0<b?1:3,a,new n(a.x+b/2,a.y))):f.push(new x(0<b?1:3,a)));f.length&&(d={j:f,C:!1})}return d}
+function Ia(a){var b=C;const c=b.l;if(null!==a)if(a.B)E(b,a.dir)&&(a=null===a.h?a.D:null,b.g.x+=a.dx,b.g.y+=a.dy,b.s=-1===b.g.x&&0===b.g.y);else if(a.O)for(var d=2;0<=d;d--)for(var e=2;0<=e;e--){var f=na(a,new n(e,d));if(f){b=e;var g=d,h=e+f.dx;f=d+f.dy;var l=c[h][f];c[h][f]=c[b][g];c[b][g]=l}}else for(d=0;3>d;d++)for(e=0;3>e;e++)if(f=na(a,new n(e,d)))b=e,g=d,h=e+f.dx,f=d+f.dy,l=c[h][f],c[h][f]=c[b][g],c[b][g]=l}
+class Ja{constructor(a,b=0,c=0){this.s=!1;this.g=new n(0,0);this.l=[[],[],[]];this.o=[];if(a instanceof y)va(this,a.l,a.o,a.s);else{let d=-1,e=0;0<=b&&9>b&&(d=b%3,e=Math.floor(b/3));b="";c=Math.min(8,Math.max(0,c));for(let f=0;8>f;f++)f===c&&(b+=q[0]),b+=q[a&15],a>>=4;va(this,b,d,e)}}get u(){return this.s}get M(){return A(this,this.g)}get K(){return this.g}A(a,b,c,d,e,f=!1){a.imageSmoothingQuality="high";if(7===qa){const g=f?0:.12;f=z.width;const h=z.height,l=Math.min(b,c)/Math.max(f*(1+g),h);b=Math.floor((b-
+f*(1-g)*l)/2);c=Math.floor((c-h*l)/2);a.drawImage(z,b,c,f*l,h*l);Ba(this,a,b,c,l,0,d,e);a.drawImage(sa,b,c,f*l,h*l);Ba(this,a,b,c,l,1,d,e);a.drawImage(ta,b,c,f*l,h*l)}}}var z=null,sa=null,ta=null,qa=0,Ea=[8,5,2,7,4,1,6,3,0],Da=[8,7,6,5,4,3,2,1,0],Ca=[0,1,2,3,4,5,6,7,8];function ka(a){Ka|=a;3===Ka&&(console.log("All images loaded. calling Redraw() for the 1st time."),La())}
+function La(a=null,b=0){var c=D;if(c){const d=c.getContext("2d"),e=c.width;c=c.height;d.clearRect(0,0,e,c);C&&C.A(d,e,c,a,b)}}function Ma(){if(0<F.length&&G<F.length){0>G&&(G=0);H=!0;const a=new Ja(F[G]);Na.postMessage({cmd:"LvlPrep",layout:B(a),cells:za(a),manPos:Aa(a)})}}function Oa(){if(I&&J){let a=0,b=0;C.u||(b=B(C),a=Pa[b]);Qa(a);void 0!==a?-1!==K&&(clearTimeout(K),K=-1):-1===K&&(K=setTimeout(()=>{Ra(b)},300))}}
+function Sa(){const a=document.getElementById("gmLvlListDiv");for(;a.firstChild;)a.removeChild(a.lastChild);const b=document.createElement("canvas"),c=128*L,d=64*L;b.width=c;b.height=c;b.style.backgroundColor="transparent";const e=b.getContext("2d");let f=null;for(let l=0;l<F.length;l++){var g=F[l];const r=document.createElement("div");var h=g.G;if(null===h){h=document.createElement("canvas");h.width=d;h.height=d;const t=h.getContext("2d");e.clearRect(0,0,c,c);(new Ja(g)).A(e,c,c,null,0,!0);t.drawImage(b,
+0,0,c,c,0,0,d,d);h.style.width="64px";h.style.height="64px";h.style.backgroundColor="transparent";g.G=h}r.appendChild(h);h="<span>Level "+(l+1)+"</span>";0<g.v&&(h+="<br><div class='diffTxt'>"+aa[Math.floor(g.v/5)]+"</div>");g=document.createElement("div");g.innerHTML=h;r.appendChild(g);r.addEventListener("click",()=>{var t=l;if(M(!1)&&0<=t&&t<F.length){var v=t.toString();try{null===v?window.localStorage.removeItem("LAvenLvl"):window.localStorage.setItem("LAvenLvl",v)}catch(ya){}Ua(t)}});r.style.cursor=
+"pointer";l===Va&&(f=r,ba(r,"lvlSelected"));a.appendChild(r)}f&&f.scrollIntoView()}function M(a){if(H||0!==N.length)return!1;Wa.hidden=!a;a&&Sa();O=a;return!0}function Ua(a=-1){0>a&&(a=Va);if(0>a||a>=F.length)a=0;Xa();P=[];Va=a;Ya=a=Ya=F[a];C=new Ja(a);Za=[];Q=[];k&&(ca(),k.innerHTML="0");La();R();Pa=[];0<Ya.v&&(Pa[B(C)]=Ya.v);R()}function S(a){H||0!==N.length||0!==P.length||($a.hidden=!a,(T=a)&&ab())}
+function ab(){let a=document.getElementsByName("expandBox");for(let b=0;b<a.length;b++)if(a[b]&&a[b]instanceof HTMLInputElement){const c=a[b],d=a[b].nextElementSibling.nextElementSibling;d&&d instanceof HTMLElement&&"content"===d.className&&(d.style.maxHeight=c.checked?d.scrollHeight+"px":"0px")}}function bb(a,b){var c=B(C);if(0>a||65536<=a||0>b||65536<=b)throw"coding error";Q.push(c);Za.push((a<<16)+b)}
+function cb(){if(0<Q.length){const a=Za.pop();return{L:Q.pop(),R:a>>16,I:a&65535}}return null}function db(a,b){let c=!1;-1!==K&&(clearTimeout(K),K=-1);if(a=Ha(a,b))N=N.concat(a.j),a.C||bb(oa(a.j[0]),oa(a.j[a.j.length-1])),c=!0;0<N.length&&-1===U&&(eb=performance.now(),U=window.setTimeout(fb,10));R();return c}
+function fb(){U=-1;if(0<N.length){var a=N[0],b=C;b=null!==a&&0===b.g.x&&0===b.g.y&&a.B&&3===a.dir&&2===w[wa(b,0,0).i][3]?1.2:1;let c=Math.max(0,Math.min(b,(performance.now()-eb)/300));a.B&&!E(C,a.dir)?La(N[0],.5<c?(1-c)/2:c/2):La(N[0],c);c>=b&&(0<N.length&&(Ia(N[0]),N.splice(0,1)),eb=performance.now());0<N.length?U=window.setTimeout(fb,10):(a=B(C),b="",1<Q.length&&Q[Q.length-2]===a&&(b="BCK TO ",cb(),cb()),k&&(C.u?(ba(k,"wonTxt"),k.innerHTML="OUT IN "+Q.length.toString()):(ca(),k.innerHTML=b+Q.length.toString())),
+R(),0<P.length?gb():Oa())}}function R(){hb&&(hb.disabled=N&&1<N.length||0===Q.length);ib&&(ib.firstChild.textContent=I?"\ue63e":"\ue648");J&&(J.hidden=!I,Qa(C.u?0:Pa[B(C)]))}function gb(){if(0<P.length&&-1===U&&0===N.length)if(jb)P=[],Oa();else{const a=P[0];N=N.concat(a);bb(oa(a[0]),oa(a[a.length-1]));P.splice(0,1);eb=performance.now();U=window.setTimeout(fb,10)}}function Ra(a,b=!1){K=-1;(b||a===B(C))&&Na.postMessage({cmd:"NavInfo",layout:a,cells:za(C),manPos:Aa(C)})}
+function Qa(a){I&&J&&(void 0===a||0>=a?(J.innerHTML='<span style="font-size:18px;">(+_+)</span>',J.className="ProxBad"):(J.innerHTML=a.toString(),J.className="Prox"+(10>a?4:15>a?3:20>a?2:30>a?1:0)))}
+function kb(a){if(O)M(!1);else if(T&&S(!1),V=W=-1,lb=X=null,!C.u&&!H&&!O){var b=D.getBoundingClientRect(),c=a.pageX-b.left;b=a.pageY-(b.top+(document.documentElement.clientHeight?document.documentElement:document.body).scrollTop);if(a=Fa(c*L,b*L))if(0<P.length)jb=!0;else if(0===N.length)if(xa(C,a.m)){lb=[];for(var d=0;4>d;d++)0!==w[C.M.i][d]&&lb.push(d);W=c;V=b;X=a.m}else{if(c=0<=a.m.x&&4>a.m.x&&0<=a.m.y&&4>a.m.y)c=a.m.x,b=a.m.y,d=C,c=!(0<=c&&4>c&&0<=c&&4>b&&0>d.l[c][b])&&!db(a.m,-1);if(c){a:{a=a.m;
+c=C;for(b=0;4>b;b++){var e=b;if((d=A(c,c.g))||null===d&&1===e){var f=new ea(e);d=0;if(0!==(d=E(c,e))&&2!==d){f=new n(c.g,f);if(m(f,a)){a=b;break a}for(e=(e+2)%4;0!==A(c,f).level;){let g=-1;for(let h=0;4>h;h++)if(h!==e&&0!==(d=E(c,h,f))){g=h;break}if(0<=g)e=g;else break;f=new n(f,e);if(m(f,a)){a=b;break a}e=(e+2)%4;if(2===d)break}}}}a=-1}0<=a&&4>a&&db(C.K,a)}}}}
+function mb(a){if(0<=W&&0<=V&&0===N.length&&null!==X){var b=D.getBoundingClientRect();function d(f){for(let g=0;g<lb.length;g++)if(lb[g]===f)return!0;return!1}var c=a.pageX-b.left-W;a=a.pageY-(b.top+(document.documentElement.clientHeight?document.documentElement:document.body).scrollTop)-V;c=15<c?1:-15>c?3:-1;const e=15<a?2:-15>a?0:-1;if(0<=c||0<=e)a=0,b=-1,d(c)&&(a++,b=c),d(e)&&(a++,b=e),c=-1,1===a&&(c=b),0<=c&&(db(X,c),W=V=-1,X=null)}}
+function nb(a){if(0<=W&&0<=V&&0===N.length&&null!==X){const b=D.getBoundingClientRect();let c=a.pageY-(b.top+(document.documentElement.clientHeight?document.documentElement:document.body).scrollTop)-V;15>Math.abs(a.pageX-b.left-W)&&15>Math.abs(c)&&(a=Fa(W*L,V*L))&&!a.N&&0<=a.J&&db(a.m,a.J)}W=V=-1;lb=X=null}
+function ob(a){if(!C||C.u||H||O||T||0!==N.length||!(0>W||0>V||null===X))if(O||T){if("Escape"===a.key||"Esc"===a.key)O&&M(!1),T&&S(!1)}else 0<P.length&&a.key.match(/^(Arrow|Left|Right|Up|Down|Esc|Space|Enter|Return| ).*/i)&&(jb=!0);else if(!a.isComposing&&229!==a.keyCode){var b=-1;switch(a.key){case "Left":case "ArrowLeft":b=3;break;case "Right":case "ArrowRight":b=1;break;case "Up":case "ArrowUp":b=0;break;case "Down":case "ArrowDown":b=2;break;case "z":a.ctrlKey&&!a.shiftKey&&!a.altKey&&!a.metaKey&&
+0<Q.length&&pb("undo")}0<=b&&4>b&&db(null,b)}}
+function pb(a){if(O)M(!1);else if(T)S(!1);else if(0<P.length&&(jb=!0),0===N.length){switch(a){case "showAbtBox":S(!0);break;case "closeAbtBox":S(!1);case "restart":Ua();break;case "pickLevel":M(!0);break;case "closeLvlPicker":M(!1);break;case "navToggle":(I=!I)?0===N.length&&G>=F.length&&!H&&Ra(B(C),!0):-1!==K&&(clearTimeout(K),K=-1);R();break;case "autoSolve":qb&&C&&!C.u&&0===N.length&&!H&&(Xa(),H=!0,Na.postMessage({cmd:"Solve",layout:B(C),cells:za(C),manPos:Aa(C)}));break;case "undo":if(0===N.length&&
+!H&&0<Q.length&&(a=cb(),8>a.I?a=Ga(C,((a.I&3)+2)%4):(a=(a.L>>24)%9,a=Ha(new n(a%3,Math.floor(a/3)))),a&&!a.C&&null!==a.j&&0<a.j.length)){for(let b=0;b<a.j.length;b++)a.j[b].H=!0;N=N.concat(a.j);0<N.length&&-1===U&&(eb=performance.now(),U=window.setTimeout(fb,10))}}R()}}function rb(){-1!==sb&&window.clearTimeout(sb);sb=window.setTimeout(tb,200)}
+function tb(){var a=window.innerHeight;document.documentElement.style.setProperty("--vh",(a/100).toFixed(2)+"px");if(D&&Y&&Z){const b=window.innerWidth;let c=b,d=a;0<b-a?(Z.style.width="120px",Z.style.height=a.toString()+"px",Y.style.left="120px",Y.style.top="0px",Y.style.width=(b-150).toString()+"px",Y.style.height=a.toString()+"px",c=b-120):(Z.style.width=b.toString()+"px",Z.style.height="40px",Y.style.left="0px",Y.style.top="40px",Y.style.width=b.toString()+"px",Y.style.height=(a-40).toString()+
+"px",d=a-40);a=Math.floor(d*L);D.width=Math.floor(c*L);D.height=a;D.style.width=c.toString()+"px";D.style.height=d.toString()+"px";La()}}function ub(a){if(a&&a.target instanceof HTMLInputElement){a=a.target;if(a.checked){let b=document.getElementsByName("expandBox");for(let c=0;c<b.length;c++){const d=b[c];d!==a&&d instanceof HTMLInputElement&&"checkbox"===d.type&&(d.checked=!1)}}ab();a.scrollIntoView()}}
+function Xa(){-1!==U&&(window.clearTimeout(U),U=-1);for(let a=0;a<N.length;a++)Ia(N[a]);N=[]}var D=null,Y=null,Z=null,$a=null,k=null,vb=null,hb=null,Wa=null,ib=null,J=null,L=window.devicePixelRatio||1,C=null,Ya=null,Va=-1,F=[],O=!1,T=!1,H=!1,qb=!1,I=!1,Pa=[],K=-1,N=[],U=-1,eb=0,lb=null,Za=[],Q=[],Ka=0,G=-1,P=[],jb=!1,W=-1,V=-1,X=null,sb=-1;let Na=new Worker("lavenworker.js");Na.onerror=a=>{console.log(a)};
+Na.addEventListener("message",function(a){if(a&&a.data){var b=a.data;switch(b.type){case "Solution":console.log(b.nmoves.toString()+" moves solve.");vb&&(vb.hidden=!0);switch(b.cmd){case "Solve":a=b.nmoves;b=b.moves;P=[];var c=C;let h=!1;for(let l=0;l<a&&!h;l++){const r=[];var d=b[2*l+1],e=d>>16;let t=new Ja(b[2*l],Math.floor(e/9),e%9);var f=d&3;if(0!==(d&4)){d=ua(e%9);a:{for(e=0;3>e;e++)for(var g=0;3>g;g++)if(0>c.l[g][e]){c=new n(g,e);break a}c=null}e=new n(d.x,d.y);g=null;switch((f+2)%4){case 0:-2===
+d.y-c.y&&(g=new n(d.x,d.y+1));break;case 1:2===d.x-c.x&&(g=new n(d.x-1,d.y));break;case 2:2===d.y-c.y&&(g=new n(d.x,d.y-1));break;case 3:-2===d.x-c.x&&(g=new n(d.x+1,d.y))}r.push(new x(f,e,g))}else if(f=Ga(t,f),!f.C&&null!==f.j&&0<f.j.length)for(f=f.j,d=f.length-1;0<=d;d--)r.push(new x((f[d].dir+2)%4));else h=!0;0<r.length&&P.push(r);c=t}0<P.length&&(jb=!1,gb());break;case "LvlPrep":0<F.length&&0<=G&&G<F.length&&(F[G].v=b.nmoves,G++,G<F.length?Ma():I&&Oa());break;case "NavInfo":a=b.layout,b=b.nmoves,
+Pa[a]=b,B(C)===a&&Qa(b)}H=!1;break;case "Progress":vb&&(vb.hidden=!1);break;case "WasmReady":console.log("Wasm Ready."),qb=!0,Ma()}}R()});
+window.initPage=function(){function a(c,d){if(c=document.getElementById(c))c.onclick=e=>{e.stopPropagation();pb(d)};return c}a("restartBtn","restart");a("pickLvlBtn","pickLevel");a("revealBtn","autoSolve");a("helpBtn","showAbtBox");hb=a("undoBtn","undo");a("closeLvlPicker","closeLvlPicker");ib=a("navBtn","navToggle");a("closeAbtBox","closeAbtBox");$a=document.getElementById("aboutBoxDiv");Y=document.getElementById("mazeDiv");Z=document.getElementById("btnDiv");k=document.getElementById("moveCount");
+D=document.getElementById("gfxCanv");D.style.backgroundColor="#fff";vb=document.getElementById("spinner");Wa=document.getElementById("lvlPicker");J=document.getElementById("navInfo");F.push(new y("\u2550\u2190\u2510\u2554x\u2518\u255a\u2190\u2510",1,2));F.push(new y("\u2557\u2193\u2514\u255ax\u2190\u2514\u2550\u2510",1,0));F.push(new y("\u2510\u2191\u255d\u2190\u2518\u2514\u255ax\u2551",1,0));F.push(new y("\u2554\u2190\u2510\u2191\u2514\u2518x\u255a\u2550",0,1));F.push(new y("\u2554\u2550\u2557\u2191x\u2191\u2514\u2518\u2514",
+2,2));F.push(new y("\u2510\u250c\u2192\u2190\u2514x\u2557\u255d\u2551",2,0));F.push(new y("\u2557\u2554\u2550\u2191\u250cx\u2191\u2514\u2518",2,2));F.push(new y("x\u250c\u2192\u2190\u2518\u2554\u2550\u250c\u2557",0,1));F.push(new y("\u2190\u250c\u2192\u2550\u2514\u2518\u2554\u255ax",2,1));F.push(new y("\u2550\u255a\u2557\u250c\u2192\u2190\u2514\u2510x",1,2));F.push(new y("\u2190\u2510\u2551\u2190\u2518x\u2514\u2554\u2557",0,2));F.push(new y("\u2554\u2550\u2190\u255ax\u2510\u2193\u250c\u2518",2,2));
+F.push(new y("\u2554\u2557x\u2191\u2191\u2551\u2514\u2518\u2514",0,1));F.push(new y("\u255a\u2557x\u2192\u2190\u2510\u2550\u2514\u2518",1,2));F.push(new y("\u250c\u2550\u2518\u2514\u2192\u2557x\u2554\u2191",0,0));F.push(new y("\u2551\u2557x\u255a\u250c\u2192\u2190\u2514\u2510",2,1));F.push(new y("\u2518\u2557\u250c\u2193x\u2514\u255a\u2550\u2190",2,0));F.push(new y("\u2557\u2510x\u250c\u2514\u2192\u2190\u2551\u255a",1,0));F.push(new y("\u2551\u2191\u2557\u250c\u2510\u250cx\u2193\u255a",1,2));F.push(new y("\u250c\u2510\u2551x\u2510\u2193\u255a\u2190\u255d",
+0,0));F.push(new y("\u2191\u2557\u2554\u2551\u250c\u250c\u2190\u2518x",0,2));F.push(new y("\u2550\u2190\u2557\u250c\u2518x\u255a\u2192\u2514",0,1));F.push(new y("\u255a\u2510\u2191\u2550\u250c\u2510\u2557x\u2193",1,1));F.push(new y("\u250c\u2192\u2190\u2557x\u2518\u255a\u2514\u2551",1,2));F.push(new y("\u250c\u2192\u2190\u2557x\u2518\u255a\u2514\u2551",2,0));F.push(new y("\u2192\u2557\u2510x\u2551\u2510\u2510\u255a\u2190",2,2));F.push(new y("x\u2518\u2190\u2510\u2554\u2550\u2518\u2191\u255a",1,2));
+F.push(new y("\u250c\u2518x\u2554\u2550\u255d\u2191\u2190\u2514",0,2));F.push(new y("\u2551\u250c\u2557\u2190\u2518x\u2514\u255a\u2192",0,1));F.push(new y("x\u2557\u250c\u2514\u255d\u2518\u2192\u2550\u2190",2,2));F.push(new y("\u2192\u2557x\u250c\u255a\u2190\u2550\u2514\u2518",2,2));F.push(new y("\u2518\u2514\u2550x\u2554\u2190\u2192\u255d\u250c",2,1));F.push(new y("\u2557\u2191\u2514\u255ax\u2192\u2514\u2550\u2510",1,0));var b=da();Ua(b&&0<=+b&&+b<F.length?+b:0);la();ra();b=document.getElementsByName("expandBox");
+for(let c=0;c<b.length;c++)if(b[c]instanceof HTMLInputElement){const d=b[c];"checkbox"===d.type&&(d.addEventListener("click",ub),d.checked=!1)}ab();window.onkeydown=ob;window.onresize=rb;D.style.touchAction="none";D.onpointerdown=kb;document.onpointermove=mb;document.onpointerup=nb;Z.onclick=()=>{O&&M(!1);T&&S(!1)};tb();R()};
+</script>
+</head>
+
+<body onload="initPage();">
+
+  <div id="mazeDiv">
+    <canvas class="gfxCanv" id="gfxCanv"></canvas>
+  </div>
+  <div id="btnDiv">
+    <button class="cmdBtn" id="helpBtn" title="About">&#xe55b;<span class="btnTxt">About</span></button>
+    
+    
+    
+    <button class="cmdBtn" id="restartBtn" title="Restart level">&#xe88a;<span class="btnTxt">Restart</span></button>
+    <button class="cmdBtn" id="pickLvlBtn" title="Level picker">&#xe0ee;<span class="btnTxt">Levels</span></button>
+    <button class="cmdBtn" id="undoBtn" title="Undo last move">&#xe166;<span class="btnTxt">Undo</span></button>
+    <button class="cmdBtn" id="navBtn" title="Proximity Sensor">&#xe1da;<span class="btnTxt">Proximity</span></button>
+    <button class="cmdBtn" id="revealBtn" title="Auto move">&#xf06c;<span class="btnTxt">Auto</span></button>
+    <div id="moveCount">0</div>
+  </div>
+
+  <div id="spinner" class="spinner" hidden>
+  </div>
+
+  <div id="navInfo">
+  </div>
+
+  <div id="lvlPicker" hidden>
+    <div id="pickerTitle"><span>Levels</span><button class="closeBtn" id="closeLvlPicker">&#xe5cd;</button></div>
+    <div id="gmLvlListDiv" class="gameList">
+    </div>
+  </div>
+
+  <div id="aboutBoxDiv" hidden>
+    <div id="aboutBoxContentDiv">
+      <span class="abtTitleBand">
+        “L'Aventurier... <span style="color:#631">Vrai</span>”
+      </span>
+      <p></p>
+
+      <section class="collapsable">
+        <input id="esc" type="checkbox" name="expandBox">
+        <label name="&#xe566;" for="esc">Enfuyez-vous <i>vite!</i></label>
+        <div class="content">
+          You, the renowned archaeologist and adventurer, are trapped in a mysterious
+          catacomb with floating chambers and are desperate to find a way out...
+          <p>
+          Though you've figured out the ancient mechanisms that shift the chambers,
+          it's tricky to find an arrangement that would get you out of the maze.
+          </p>
+          <p>
+          Not only is the water below infested with hungry crocodiles,
+          but the elevated chambers with emerald flooring are also booby-trapped to
+          kill anyone standing still...
+          </p>
+        </div>
+      </section>
+      <section class="collapsable">
+        <input id="clc" type="checkbox" name="expandBox">
+        <label name="&#xe55b;" for="clc">How To Play</label>
+        <div class="content" style="margin-left:0">
+          <ul>
+            <li>Find a way to move the Adventurer around and escape through the elevated exit
+              at the top-left corner of the catacomb.</li>
+            <li>Click on a chamber tile to slide it towards the empty slot, if possible.</li>
+            <li>The chamber tile with the adventurer inside cannot be shifted.</li>
+            <li>Drag the Adventurer token or use the arrow keys to move the adventurer.</li>
+            <li>The Adventurer cannot move between elevated emerald-floored levels and
+              lower-level stone-floored chambers, unless through a connecting staircase.</li>
+            <li>The Adventurer can run-through, but cannot stay in an of the emerald-floored
+              elevated chambers. These are booby-trapped...</li>
+          </ul>
+        </div>
+      </section>
+      <section class="collapsable">
+        <input id="se3" type="checkbox" name="expandBox">
+        <label name="&#xf06c;" for="se3">Robo Sidekick</label>
+        <div class="content">
+          An exhausted adventurer could sometimes use a little help from some trusty modern
+          gadgets &mdash; e.g., a little Robot that automatically lead the Adventurer out
+          of the maze using the fewest number of moves.
+          <p>Click on the "Auto" button to tell the Robot to solve the maze automatically.
+          Press on the maze or any of the buttons to interrupt the robo-moves.
+          </p>
+          <p>Be careful not to let the Robot steal your thunder and spoil the fun of the adventure!</p>
+        </div>
+      </section>
+      <section class="collapsable">
+        <input id="se5" type="checkbox" name="expandBox">
+        <label name="&#xe63e;" for="se5">Proximity Sensor</label>
+        <div class="content">
+          The Proximity Sensor is another modern gadget that could help the Adventurer
+          check whether they are on the right path. The number displayed is the minimum
+          number of moves to an escape.
+          <p>Please don't get obsessed with the number of moves &mdash;
+            <i><span style="color:#556b2f;font-size:20px;font-family:'Times New Roman';font-style:italics">
+              The fun is in the journey,
+            not the destination!</span></i></p>
+        </div>
+      </section>
+      <section class="collapsable">
+        <input id="se4" type="checkbox" name="expandBox">
+        <label name="&#xf10a;" for="se4">Credits</label>
+        <div class="content">
+          This is a TypeScript reimplementation of my ICS3U1 final project, with
+          a new, highly optimized and fast BFS solver implemented in C++.
+          I worked ceaselessly for days on this game and was quite happy with it.
+          Disappointingly, it was simply silently marked
+          without comment or feedback... It would be nice
+          if we could get a chance to discuss and play with
+          other classmates' creation and share our experience.
+          <p>
+          The game is based on a physical puzzle named L'Aventurier given to me when I was very young.
+          I still like the puzzle very much. The original game is designed
+          by Raf Peeters for the Belgium company Smart Games. The images are taken
+          using a 600mm super-telephoto lens from 10ft+ away to minimize perspective
+          distortions. The photos are then enhanced and edited in Photoshop, with
+          semi-transparent shadows hand-painted to create the reasonably convincing
+          photo-realistic, i.e. <i style="color:#ff8c00">vrai</i>, appearance.
+          </p>
+          <p>Rufin, Feb 2023</p>
+        </div>
+      </section>
+
+    </div>
+    <button class="closeBtn" id="closeAbtBox">&#xe5cd;</button>
+  </div>
+
+</body>
+</html>

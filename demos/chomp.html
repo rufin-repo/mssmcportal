@@ -1,0 +1,46 @@
+<!doctype html>
+<title>Chomp</title>
+  <script src="2bLib.js"></script>
+  <script src="chomp.js"></script>
+<html>
+  <style>
+    html
+    {
+      background-color: white;
+      padding:0;
+    }
+    .actionBtn {
+      height:40px;
+      width:80px;
+    }
+    td {
+      font-family: sans-serif;
+      font-weight: bold;
+      font-size: 24px;
+    }
+    .greenTxt {
+      color: green;
+    }
+    .redTxt {
+      color: red;
+    }
+  </style>
+  <body onload="InitPage()" style="margin: 0px; padding: 0px; border: 0px">
+  <table style="display:absolute; border:0; padding:0; margin:0; border-spacing:0; height:calc(100vh - 40px); width:100vw;">
+    <tr>
+      <td id="playerInfo">
+        <!-- <canvas id="player" height="30"></canvas> -->
+      </td>
+      <td style="text-align:right"><button class="actionBtn" onclick="location.reload()">New game</button></td>
+    </tr>
+    <tr>
+      <td colspan="2" id="canvtd" height="100%" width="100%" style="padding:0">
+        <!-- <canvas id="gamecanvas" style="height:100%; width:100%;"></canvas> -->
+      </td>
+    </tr>
+  </table>
+  <br>
+  <audio src="Sounds/ahoooga.wav" id="win"></audio>
+  <audio src="Sounds/penalty.wav" id="err"></audio>
+</body>
+</html>

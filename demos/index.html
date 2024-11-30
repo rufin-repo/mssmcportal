@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MMA Club Fair 2022</title>
+<meta name="Description" content="Club Fair 2022 Demos. Copyright (c) 2022 Rufin All rights reserved."/>
+
+<style>
+@font-face {
+  font-family: 'TypeWriter';
+  font-style: normal;
+  font-weight: normal;
+  src: local('TypeWriter'), url("rsrc/gtw.ttf");
+}
+@font-face {
+  font-family: "TypeWriter2";
+  font-style:normal;
+  font-weight:normal;
+  src: local("TypeWriter2"), url("rsrc/VTBULLET.TTF");
+}
+@font-face {
+  font-family: "TypeWriter2";
+  font-style:bold;
+  font-weight:600;
+  src: local("TypeWriter2"), url("rsrc/VTCORONA.TTF");
+}
+/* @font-face {
+  font-family: "Icons";
+  src: local("Icons"), url("rsrc/469Icons.ttf");
+} */
+
+@font-face {
+  font-family: "Icons";
+  src: local("Icons"), url("rsrc/MaterialIconsOutlined-Regular.otf");
+}
+
+html, body{
+--ttl1: darkorange;    --ttl1i:chocolate;
+--ttl3: gold;          --ttl3i:darkgoldenrod;
+--ttl2: darkseagreen;  --ttl2i:seagreen;
+--hoverBg: #ffffef;  /* hover bg */
+/* darkslategray;   expanded section title color */
+--txtClr1:#000; /* #850;*/
+font-family: "TypeWriter2";
+font-size:16px;
+}
+
+h1 {
+  font-family: "TypeWriter2";
+  font-style: bold;
+  font-weight: 600;
+  font-size: 36px;
+  border-radius: 3px;
+  padding: 4px 20px 4px 20px;
+  box-shadow: 4px 4px 8px 4px rgba(0,0,0,0.05);
+  background-color:#fff;
+  color:darkgray;
+}
+
+i {
+  font-family: 'TypeWriter2';
+  font-style:italic;
+  font-size:18px;
+  font-stretch: condensed;
+  color:seagreen;
+}
+
+small {
+  font-family: 'Courier New', Courier, monospace;
+  font-style:italic;
+  font-size: 17px;
+  color:dimgray;
+}
+
+.collapsable > input[name="expandBox"] {
+  display: none;
+}
+
+.collapsable label {
+  font-family: "TypeWriter";
+  font-size: 26px;
+  margin: 0 auto;
+}
+
+.collapsable .content {
+  /* font-family: 'Courier New', Courier, monospace; */
+  font-family: "TypeWriter2";
+  font-weight: normal;
+  font-size:22px;
+  margin-left:40px;
+  color: var(--txtClr1);
+}
+
+/* Collapsible content animation effects */
+.collapsable .content {
+  /* background: #fff; */
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(-90deg);
+  /* transform: scaleY(0);
+  transform-origin:0% 0%; */
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(0deg);
+  max-height: 100vh;
+  /* transform: scaleY(100%);
+  transform-origin:0% 0%; */
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  border-top: 0;
+  transition: 0.3s;
+}
+
+.collapsable label {
+  display: block;
+  margin: 0;
+  color: var(--ttl2);
+  cursor: pointer;
+  font-weight: normal;
+  padding:10px;
+  background: transparent;
+  user-select: none;
+}
+
+.collapsable label:hover,
+.collapsable label:focus {
+  color: var(--ttl3);
+  background:var(--hoverBg);
+}
+.collapsable > input[name="expandBox"]:checked ~ label {
+  color: var(--ttl1);
+  background: transparent;
+}
+
+/* Style for the animated icon before the label of collapsed section */
+.collapsable label::before {
+  color: var(--ttl2i);
+  font-family: "Icons";
+  content: attr(name); /*"\2312";*/
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  transform-origin: 50% 50%; /*previously 50% 39%*/
+  transition: 0.4s;
+}
+.collapsable label:hover::before,
+.collapsable label:focus::before {
+  color: var(--ttl3i);
+}
+
+/* Style for the animated icon before the label of expanded section */
+.collapsable > input[name="expandBox"]:checked ~ label::before {
+  /* content: "\2313"; */
+  color: var(--ttl1i);
+  font-family: "Icons";
+  content: attr(name);
+  transform: rotate(180deg);
+  transform-origin: 50% 50%;
+  transition: 0.4s;
+}
+
+b { color: slategray;
+}
+
+a, a>b {
+  color: orange;
+  font-family: "TypeWriter2";
+  font-style:bold;
+  font-weight:600;
+}
+a:visited {
+  color: tan;
+  font-style:normal;
+}
+img {
+  max-width: 70vw;
+  max-height:70vh;
+}
+
+</style>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_HTMLorMML">
+</script>
+<script>
+function updateMaxHeight()
+{
+  let inps = document.getElementsByName("expandBox");
+  for (let i=0; i<inps.length; i++) {
+    if (inps[i] && inps[i] instanceof HTMLInputElement) {
+      let content = inps[i].nextElementSibling.nextElementSibling;
+      if (content && content.className==="content") {
+        content.style.maxHeight = inps[i].checked ? content.scrollHeight+"px" : "0px";
+      }
+    }
+  }
+}
+function chkboxclick(e)
+{
+  if (e && e.target instanceof HTMLInputElement) {
+    let tgt = e.target;
+    if (tgt.checked) {
+      let inps = document.getElementsByName("expandBox");
+      for (let i=0; i<inps.length; i++) {
+        if (inps[i]!==tgt && inps[i] instanceof HTMLInputElement && inps[i].type==="checkbox") {
+          inps[i].checked=false;
+        }
+      }
+    }
+    updateMaxHeight();
+  }
+}
+function init()
+{
+  let inps = document.getElementsByName("expandBox");
+  for (let i=0; i<inps.length; i++) {
+    if (inps[i] instanceof HTMLInputElement && inps[i].type==="checkbox") {
+      inps[i].addEventListener("click", chkboxclick);
+    }
+  }
+  updateMaxHeight();
+}
+</script>
+
+
+</head>
+<body onload="init()" onresize="updateMaxHeight()">
+
+<h1>Some Motivating Math Problems and Methods of Solution:</h1>
+
+
+<section class="collapsable">
+  <input id="lav" type="checkbox" name="expandBox">
+  <label name="&#xe3ec;" for="lav">L'Aventurier... Vrai</label>
+  <div class="content">
+    <a href="//rufin.schsu.com/lavenweb/laven.html"><img src="rsrc/ExitingCatacombs.webp"></a><br>
+    <a href="//rufin.schsu.com/lavenweb/laven.html">Play</a> an implementation of the absorbing physical puzzle L'Aventurier!<br>
+    <p>Could you calculate how many distinct possible game states (before exiting) are there in
+    the Level-1 layout?<br>
+    What is the invariant of the puzzle?
+    </p>
+  </div>
+</section>
+
+
+<section class="collapsable">
+  <input id="clc" type="checkbox" name="expandBox">
+  <label name="&#xe9fe;" for="clc">3D Geometry and Integration</label>
+  <div class="content">
+    <p>
+      A person wants to create a gas tank in the shape of a cross formed from the union of two circular cylinders.
+      The cylinders each have radius <em>r</em> and length <em>4r</em>, with <em>r</em>=3.
+      The two cylinders intersect perpendicularly at the midpoint of the cylindrical axes. Find the volume of the tank.
+    </p>
+    <img src="img/Union2Cylinders.jpg"><p>
+      Question 2: The tank is constructed by welding pieces of metal together. What is the shape of the its net?
+    </p>
+    <a href="CalcCylinder.pdf">Solution</a>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="cba" type="checkbox" name="expandBox">
+  <label name="&#xe9f4;" for="cba">Colouring a Network of Nodes</label>
+  <div class="content">
+    <p>
+      How many ways are there to colour the vertices A to D in the following networks?
+      Vertices can be coloured using <em>n</em> colours, and
+      vertices connected by a line may not be of the same colour.
+      <img src="img/ClubFair_CombQs.jpg"/>
+
+    </p>
+    <a href="ColourNetwork.pdf">Solution</a>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="cbb" type="checkbox" name="expandBox">
+  <label name="&#xe0bc;" for="cbb">PIN numbers</label>
+  <div class="content">
+    <p>When it comes to choosing PIN numbers for our bank cards or our phones, the most popular numbers are the obvious ones, such as 1234, 1111, 1212 etc. </p>
+    <p>You and a friend are discussing how you choose four-digit PINs. You establish that neither of you would ever use the digit 0.</p>
+    <p>“I like to choose four different random digits,” you say.
+    <p>“I like to choose three different random digits,” they reply, “so one of the digits is used twice.”</p>
+    <p>Which strategy gives a larger pool of possible four-digit PINs?</p>
+    <a href="PinNs.pdf">Solution</a>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="ntd" type="checkbox" name="expandBox">
+  <label name="&#xeb40;" for="ntd">Non-Transitive Dice</label>
+  <div class="content">
+    <a href="dice.html">Dice roll simulation</a><br>
+    <a href="ProbNTD.pdf">Win Probabilities</a>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="cpb" type="checkbox" name="expandBox">
+  <label name="&#xf041;" for="cpb">Number theory</label>
+  <div class="content">
+    <p>
+      Given a bag of ten $10 coins and ten $3 coins, how many different sums
+      can you make up using one or more of such coins? </p>
+    <p>E.g. $37 can be made up using nine $3 coins and one $10 coin, while
+      $130 can be made up using all twenty coins.
+    </p>
+    <a href="CoinProb.pdf">Solution</a>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="pkp" type="checkbox" name="expandBox">
+  <label name="&#xf11b;" for="pkp">Inequalities</label>
+  <div class="content">
+    <p>
+      For a set of n numbers `x_1 ... x_n`:
+    </p><p>
+      Arithmetic Mean (AM) = `(x_1 + x_2 + x_3 ... + x_n)/n`
+    </p><p>
+      Geometric Mean (GM) = `root(n)(x_1 xx x_2 xx x_3 xx ...x_n)`
+    </p><p>
+      One of the most well-known inequalities states that <br>
+      AM is always ≥ GM
+    </p>
+    <a href="AMGMPackingBlocks.pdf">A visualization of AM≥GM</a>
+  </div>
+</section>
+
+<section class="collapsable">
+  <input id="gth" type="checkbox" name="expandBox">
+  <label name="&#xe434;" for="gth">Chomp</label>
+  <div class="content">
+    <!-- Factorize `x^2 - (alpha+beta)x + alpha beta` -->
+    "Strategy-stealing": We can prove that the first player to move has a
+    winning strategy by eating the top-right square, but that doesn't mean
+    we know how to continue playing to ensure a win.
+
+    <a href="chomp.html">Chomp Game</a><br>
+    <a href="GameTChomp.pdf">Game analysis</a>
+  </div>
+</section>
+</body>
+</html>

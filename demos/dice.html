@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dice Roller</title>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="gold">
+<meta name="Description" content="web-app, offline, dice, math">
+<link rel="manifest" href="dice.manifest">
+<link rel="apple-touch-icon" sizes="192x192" href="imgs/diceapp.png">
+
+<style>
+  html,body{
+    width:calc(100% - 1px);
+    padding:0;
+    margin:0;
+    border:0;
+    border-collapse:collapse;
+    height: calc(100% - 1px); /*calc(100% + 80px);*/ /* fool mobile browser to allow the page to be flicked up and maximized.*/
+    font-family: "Arial", sans-serif;
+--swatchBg1: rgb(43, 43, 47);            /* UI bar normal background */
+--swatchBg2: goldenrod;       /* focused item background */
+--swatchBg3: #fffff0;         /* music score background */
+--swatchBg4: #000;            /* statusbar background */
+--swatchBg5: var(--swatchBg2);  /* hover bg */
+
+--swatchUI1: #755E55;         /* icon outline color */
+--swatchUI2: #ffffff;         /* icon body color */
+--swatchUI3: maroon;          /* highlighted icon outline */
+--swatchUI4: moccasin;        /* highlighted icon body color */
+  }
+  .noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }
+  .CWAUITable canvas {
+    /* position:absolute;
+    top:0px; left:0px; */
+    text-align:top;
+    display:block;  /* This would prevent a gap (because of text descent) inside a td */
+  }
+  .buttonTab {
+    border-collapse: collapse;
+    border-width: 0px;
+    margin: 0px;
+    padding: 0px;
+    background: transparent;
+    border:none;
+  } /*.buttonTab*/
+  tr#topButtons {
+    height:40px;
+    background-color: SlateGray;
+  }
+  tr#calcbtnsrow {
+    background-color:lightslategray;
+  }
+  table.CWAUITable {
+    position: fixed; /* Fixed so that it is unaffected by scrolling or flicking.*/
+    /* if position:absolute is used, an "onscroll" event handler must be added to
+      reposition the top of this table (after deboucing):
+        UITable.style.top=document.body.scrollTop.toString()+"px"
+      o.w. the ui might got flicked outside the window boundary in some mobile
+      browsers (e.g. mobile safari) */
+    top:0px;     left:0px;
+    width:100%;  height: 100%;
+    padding:0px;  /* T R B L */
+    margin:0px;
+    border:none;
+    border-collapse:collapse;
+  } /*.CWAUITable*/
+  #CWAMainCanvasTr, #CWAMainCanvasTd, #CWAStatusTxtTr{
+    border: 0px; padding:0px; margin: 0px;
+    vertical-align:top; overflow:hidden;
+    border-collapse:collapse;
+  }
+  #CWAMainCanvasTr, #CWAMainCanvasTd {
+    height:100%;
+    width:100%;
+  }
+  .CWAStatusTxt {
+    padding:0 4px 0 4px;
+    font-family: "Arial", sans-serif;
+    height: 20px;
+    background-color: #000;
+    /* background-color: var(--swatchBg4); */
+    color:#fff;
+    overflow: hidden;
+  }
+
+.dialogButton {
+  color: #000;
+  padding:6px 12px 6px 12px;  /* T R B L */
+  border-radius: 8px;
+  border:none;
+  background-color: gainsboro;
+  float: right;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+.dialogButton:hover {
+  background-color: #eee;
+  border: 1px;
+  border-color:gainsboro;
+}
+
+.dialogButton:disabled, .dialogButton:disabled:hover {
+  background-color: silver;
+  color: #666;
+}
+
+.dialogButton.caution {
+  background-color:mistyrose;
+}
+.dialogButton.caution:hover {
+  background-color:pink;
+}
+.dialogButton.darker {
+  background-color:silver;
+}
+.dialogButton.darker:hover {
+  background-color:gainsboro;
+}
+
+.flushRight {
+  float:right;
+}
+.flushLeft {
+  float:left;
+}
+.dangerFlushLeft {
+  float:left;
+  background-color: mistyrose;
+}
+.alignRight {
+  text-align:right;
+}
+.dialogDismissButtonsDiv button {
+  margin:5px
+}
+
+.genericQueryDiv{
+  position: fixed; /*absolute;*/
+  background-color:#fff; /*rgb(255, 250, 225);*/
+  min-width:320px;
+  max-height: 90%;
+  top: 20px;
+  left: 50%;
+  overflow: auto;
+  /*white-space:nowrap;
+  text-overflow: ellipsis; */
+  padding: 2px;
+  border-radius: 4px;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  z-index: 2;
+  box-shadow: 3px 12px 16px 4px rgba(0,0,0,0.25);
+}
+.genericQueryMsgDiv {
+  padding: 40px 0px;
+  background:transparent;
+}
+
+.alertBoxDiv {
+  position: fixed; /*absolute;*/
+  background-color:#fff; /*rgb(255, 250, 225);*/
+  min-width:320px;
+  top: 20px;
+  left: 50%;
+  padding: 2px;
+  -ms-transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+  z-index: 3;
+  box-shadow: 3px 12px 16px 4px rgba(0,0,0,0.25);
+} /* alertBoxDiv */
+table.alertBoxTable {
+  background:transparent;
+  padding: 0px;
+  margin: 0px;
+  width:100%;
+} /* alertBoxTable */
+table.alertBoxTable tr td {
+  padding:10px;
+}
+table.alertBoxTable tr:nth-child(1) td {
+  padding:2px;
+  background-color:gold;
+  /* border-bottom-style: solid;
+  border-color: #bbb #ddd #ddd #bbb; */
+}
+table.alertBoxTable tr:nth-last-child(1) td {
+  padding:10px;
+  font-size:20px;
+}
+.alertBoxDiv div.dialogDismissButtonsDiv button {
+  width:80px;
+  background-color: rgb(255, 235, 125);
+}
+.alertBoxDiv div.dialogDismissButtonsDiv button:hover {
+  width:80px;
+  background-color: rgb(255, 226, 62);
+}
+.alertBoxIconDiv {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  float:left;
+  vertical-align: top;
+  margin: 2px 12px 2px 2px;
+}
+#alertBoxMsgDiv, #genericQueryMsgDiv {
+  height:100%;
+  width:100%;
+  padding:0px;
+}
+
+.buttonPanelDiv {
+  position: absolute;
+  background-color: rgb(255,255,255); /* this is changed dynamically */
+  top:0;
+  left:0;
+  width: 400px;
+  height: 200px;
+  padding:4px;
+  border-radius: 4px;
+  z-index: 1;
+  box-shadow: 3px 8px 16px 8px rgba(0,0,0,0.2);/* T R B L */
+}
+.buttonPanelDiv.leftPointer::after {
+  content:"";
+  position:absolute;
+  top: var(--panelPointerY); /*16px;*/ /* controls vertical position */
+  left:-20px; /* value = - border-left-width - border-right-width */
+  bottom:auto;
+  border-style:solid;
+  border-width:10px 20px 10px 0;/* T R B L */
+  border-color:transparent  #fff;
+}
+
+/******************************
+ *  Splash Screen
+ ******************************/
+/* @font-face {
+  font-family: 'AppLogo';
+  font-style: normal;
+  font-weight: 900;
+  src: local('AppLogo'), url("rsrc/led_board-7.ttf");
+} */
+
+h1.splash {
+  text-align:center;
+  font-size:7vw;
+  font-family:'Courier New', monospace;
+  font-weight:900;
+}
+.aboutboxlogo {
+  font-size:30px;
+  font-family:'Courier New', monospace;
+  font-weight:900;
+}
+h3.splash {
+  text-align:center;
+}
+
+.textinfoarea {
+  font-family: 'Courier New', courier new, courier;
+  position: fixed; /*absolute;*/
+  background-color: gold;
+  min-width: 50%;
+  min-height: 20%;
+  max-height: 90%;
+  top: 50%;
+  left: 50%;
+  overflow: hidden;
+  /*white-space:nowrap;
+  text-overflow: ellipsis; */
+  padding: 4px;
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  box-shadow: 3px 8px 16px 0px rgba(0,0,0,0.2);/* T R B L */
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.dicespan {
+  font-size:35px;
+  /*padding: -10px;*/
+  color: #fff;
+  display: table-cell;
+  vertical-align: middle;
+  position: absolute;
+  cursor: pointer;
+  top: 20px;
+  left: 10px;
+  right: 10px;
+  bottom: 0px;
+  border-radius: 4px;
+  -webkit-transition: .4s;
+  transition: .4s;
+  box-shadow:0px 0px 0px #ccc;
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+}
+
+input:checked + .dicespan {
+  background-color: #2196F3;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  bottom: 20px;
+  box-shadow:0px 20px 10px #ccc;
+}
+
+.yellow {  background-color: khaki;}
+.red { background-color: darksalmon;}
+.blue {background-color: powderblue;}
+.olive {background-color: lightgreen;}
+.magenta {background-color: plum; }
+input:checked + .yellow {  background-color: gold;}
+input:checked + .red {  background-color: crimson;}
+input:checked + .blue {  background-color: mediumblue;}
+input:checked + .olive {  background-color: olivedrab;}
+input:checked + .magenta {  background-color: darkmagenta;}
+
+
+.dicerow {
+  text-align: center;
+  align-content: center;
+}
+
+.actionBtn {
+  height: 40px;
+  width: 80px;
+}
+
+select {
+  height:40px;
+  min-width:80px;
+}
+
+</style>
+
+<script src="dice.js"></script>
+</head>
+
+<body onload="initPage()">
+
+<table id="uitable" border="0" style="width:100%; height:100%;">
+
+<tr class="ctrlrow" id="dicerow">
+<td colspan="5">
+    <button class="actionBtn" id="rollBtn">Roll</button>
+    <select class="gameTypeSel" id="gameType">
+      <option selected="true" value="oneDie" id="2dice">Single-roll</option>
+      <option value="twoDice" id="1die">Double-roll</option>
+    </select>
+    <select class="nGamesSel" id="nGames">
+      <option value="1" id="1GameMatch">1 game</option>
+      <option value="5" id="5GamesMatch">5 games</option>
+      <option value="10" id="15GamesMatch">10 games</option>
+      <option selected="true" value="20" id="20GamesMatch">20 games</option>
+      <option value="50" id="50GamesMatch">50 games</option>
+    </select>
+</td>
+<td class="noselect" id="txtmsg" style="text-align:center;"> This page uses HTML5 and JS.</td>
+</tr>
+
+<tr class="dicerow" id="dicerow">
+<td>
+  <label class="switch">
+    <input type="checkbox" id="dice1" checked="true">
+    <div class="dicespan red">&#x2237;</div>
+  </label>
+</td>
+<td>
+  <label class="switch">
+    <input type="checkbox" id="dice2" checked="false">
+    <span class="dicespan blue">&#x2236;</span>
+  </label>
+</td>
+<td>
+  <label class="switch">
+    <input type="checkbox" id="dice3">
+    <span class="dicespan olive">&#x2059;</span>
+  </label>
+</td>
+<td>
+  <label class="switch">
+    <input type="checkbox" id="dice4">
+    <span class="dicespan yellow">&#x22f1;</span>
+  </label>
+</td>
+<td>
+  <label class="switch">
+    <input type="checkbox" id="dice5">
+    <span class="dicespan magenta">&#x22ee;&#x22ee;</span>
+  </label>
+</td>
+<td width="250px" style="vertical-align: bottom;">
+  Game winner
+</td>
+</tr>
+<tr style="text-align:center; vertical-align:top;">
+  <td height = "100%" id="d1rolls">1<br>2</td>
+  <td id="d2rolls"></td>
+  <td id="d3rolls">dice 3<br>results</td>
+  <td id="d4rolls"></td>
+  <td id="d5rolls"></td>
+  <td id="gamewinner"></td>
+</tr>
+
+<!-- <tr>
+<td colspan="6" class="noselect" id="txtmsg">This page uses HTML5 and JS.</td>
+</tr> -->
+
+</table>
+
+</body>
+</html>

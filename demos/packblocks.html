@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en"  onclick="chkboxclick()">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MMA Club Fair 2022</title>
+<meta name="Description" content="Club Fair 2022 Demos. Copyright (c) 2022 Rufin All rights reserved."/>
+
+<style>
+@font-face {
+  font-family: 'TypeWriter';
+  font-style: normal;
+  font-weight: normal;
+  src: local('TypeWriter'), url("rsrc/gtw.ttf");
+}
+@font-face {
+  font-family: "TypeWriter2";
+  font-style:normal;
+  font-weight:normal;
+  src: local("TypeWriter2"), url("rsrc/VTBULLET.TTF");
+}
+@font-face {
+  font-family: "TypeWriter2";
+  font-style:bold;
+  font-weight:600;
+  src: local("TypeWriter2"), url("rsrc/VTCORONA.TTF");
+}
+@font-face {
+  font-family: "Icons";
+  src: local("Icons"), url("rsrc/469Icons.ttf");
+}
+
+html, body{
+--ttl1: darkorange;    --ttl1i:chocolate;
+--ttl3: gold;          --ttl3i:darkgoldenrod;
+--ttl2: darkseagreen;  --ttl2i:seagreen;
+--hoverBg: #ffffef;  /* hover bg */
+/* darkslategray;   expanded section title color */
+--txtClr1:#000; /* #850;*/
+font-family: "TypeWriter2";
+font-size:16px;
+}
+
+h1 {
+  font-family: "TypeWriter2";
+  font-style: bold;
+  font-weight: 600;
+  font-size: 20px;
+  border-radius: 3px;
+  padding: 4px 20px 4px 20px;
+  box-shadow: 4px 4px 8px 4px rgba(0,0,0,0.05);
+  background-color:#fff;
+  color:darkgray;
+}
+
+i {
+  font-family: 'TypeWriter2';
+  font-style:italic;
+  font-size:18px;
+  font-stretch: condensed;
+  color:seagreen;
+}
+
+small {
+  font-family: 'Courier New', Courier, monospace;
+  font-style:italic;
+  font-size: 17px;
+  color:dimgray;
+}
+
+.collapsable > input[name="expandBox"] {
+  display: none;
+}
+
+.collapsable label {
+  font-family: "TypeWriter";
+  font-size: 26px;
+  margin: 0 auto;
+}
+
+.collapsable .content {
+  /* font-family: 'Courier New', Courier, monospace; */
+  font-family: "TypeWriter2";
+  font-weight: normal;
+  font-size:40px;
+  margin:0px 40px 30px 40px;
+  color: var(--txtClr1);
+}
+
+/* Collapsible content animation effects */
+.collapsable .content {
+  /* background: #fff; */
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(-90deg);
+  /* transform: scaleY(0);
+  transform-origin:0% 0%; */
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  transform-origin: 30% 0%; /* equivalent to 50% 0% */
+  transform: perspective(500px) rotateX(0deg);
+  max-height: max-content;
+  /* transform: scaleY(100%);
+  transform-origin:0% 0%; */
+  transition: max-height 0.5s, transform 0.5s;
+}
+
+.collapsable > input[name="expandBox"]:checked ~ .content {
+  border-top: 0;
+  transition: 0.3s;
+}
+
+.collapsable label {
+  display: block;
+  margin: 0;
+  color: var(--ttl2);
+  cursor: pointer;
+  font-weight: normal;
+  padding:10px;
+  background: transparent;
+  user-select: none;
+}
+
+.collapsable label:hover,
+.collapsable label:focus {
+  color: var(--ttl3);
+  background:var(--hoverBg);
+}
+.collapsable > input[name="expandBox"]:checked ~ label {
+  color: var(--ttl1);
+  background: transparent;
+}
+
+/* Style for the animated icon before the label of collapsed section */
+.collapsable label::before {
+  color: var(--ttl2i);
+  font-family: "Icons";
+  content: attr(name); /*"\2312";*/
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1em;
+  line-height: 1em;
+  vertical-align: middle;
+  transform-origin: 50% 39%;
+  transition: 0.4s;
+}
+.collapsable label:hover::before,
+.collapsable label:focus::before {
+  color: var(--ttl3i);
+}
+
+/* Style for the animated icon before the label of expanded section */
+.collapsable > input[name="expandBox"]:checked ~ label::before {
+  /* content: "\2313"; */
+  color: var(--ttl1i);
+  font-family: "Icons";
+  content: attr(name);
+  transform: rotate(180deg);
+  transform-origin: 50% 39%;
+  transition: 0.4s;
+}
+
+b { color: slategray;
+}
+
+a, a>b {
+  color: orange;
+  font-family: "TypeWriter2";
+  font-style:bold;
+  font-weight:600;
+}
+a:visited {
+  color: tan;
+  font-style:normal;
+}
+img {
+  max-width: auto;
+  max-height: 100vh;
+  object-fit: cover;
+}
+
+
+p {
+  font-family: "TypeWriter2";
+  font-weight: normal;
+  font-size:40px;
+  /* margin-left:40px; */
+  color: var(--txtClr1);
+}
+
+</style>
+
+<script>
+function updateMaxHeight()
+{
+  let inps = document.getElementsByName("expandBox");
+  for (let i=0; i<inps.length; i++) {
+    if (inps[i] && inps[i] instanceof HTMLInputElement) {
+      let content = inps[i].nextElementSibling.nextElementSibling;
+      if (content && content.className==="content") {
+        content.style.maxHeight = inps[i].checked ? content.scrollHeight+"px" : "0px";
+      }
+    }
+  }
+}
+let secti=1;
+function chkboxclick()
+{
+  let inps = document.getElementsByName("expandBox");
+  if (secti>=inps.length) {
+    return;
+  }
+  inps[secti].checked=true;
+  for (let i=0; i<inps.length; i++) {
+    if (i!==secti && inps[i] instanceof HTMLInputElement && inps[i].type==="checkbox") {
+      inps[i].checked=false;
+    }
+  }
+  secti++;
+  updateMaxHeight();
+}
+let nsections=0;
+function init()
+{
+  let inps=document.getElementsByName("expandBox");
+  nsections=inps.length;
+  updateMaxHeight;
+}
+
+</script>
+</head>
+<body onload="init()">
+  <h1>Packing blocks into a cube</h1>
+
+  <section class="collapsable">
+    <input id="tes" type="checkbox" name="expandBox" checked>
+    <div class="content">
+      <p>
+        One of the most well-known inequalities states that the arithmatic mean of a sequence of numbers is always greater or equal to its geometric mean.
+      </p><p>
+        This is a bit dry and hard to imagine when stated this way. It is possible to visualize this inequality in a tangible and more intuitive way.
+      </p>
+    </div>
+  </section>
+  <section class="collapsable">
+    <input id="b" type="checkbox" name="expandBox">
+    <div class="content">
+      <p>
+        Given 3 numbers a, b, c...
+      </p><p>
+        (a+b+c)/3 ≥ (abc)<sup>1/3</sup> <br>
+        (a+b+c)<sup>3</sup>/27 ≥ abc <br>
+        (a+b+c)<sup>3</sup> ≥ 27abc
+      </p><p>
+        This means that we can fit 27 blocks of side length a, b and c into a cube of side length a+b+c.
+      </p>
+    </div>
+  </section>
+  <section class="collapsable">
+    <input id="c" type="checkbox" name="expandBox">
+    <div class="content">
+      <p>
+        You could build your own set of bricks using card paper like this, but it's a big undertaking to make 27 identical boxes with identical dimensions.
+        It took me hours. If you don't have the patience to build 27 blocks, you can make them out of lego:
+      </p>
+      <img src="img/27x3x4x5.jpg"/>
+    </div>
+  </section>
+
+</body>
+</html>
